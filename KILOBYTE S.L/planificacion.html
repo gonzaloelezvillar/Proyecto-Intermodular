@@ -5,13 +5,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description"
-    content="Proyecto KILOBYTE S.L.: módulos de FP usados en cada parte del proyecto y fases de trabajo.">
-  <title>Proyecto: módulos y fases | KILOBYTE S.L.</title>
+    content="Descubre cómo se ha creado el Proyecto Intermodular KILOBYTE S.L.: arquitectura con Proxmox, máquinas virtuales, Firebase Hosting, Firestore, seguridad y fases de trabajo.">
+  <title>Proyecto Intermodular: arquitectura y desarrollo | KILOBYTE S.L.</title>
   <link rel="icon" type="image/png" href="images/logos/logo-kb.png">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="KILOBYTE S.L.">
   <meta property="og:title" content="Proyecto | KILOBYTE S.L.">
-  <meta property="og:description" content="Planificación del Proyecto Intermodular de 2º SMR: módulos, fases y tecnologías.">
+  <meta property="og:description" content="Arquitectura, tecnologías y fases del Proyecto Intermodular KILOBYTE S.L.: Proxmox, máquinas virtuales, Firebase y Firestore.">
   <meta property="og:url" content="https://kilobyte-sl.web.app/planificacion.html">
   <meta property="og:image" content="https://kilobyte-sl.web.app/images/fondos/fondo_red_digital_azul.jpg">
   <meta property="og:locale" content="es_ES">
@@ -42,9 +42,92 @@
   <main>
     <section class="page-hero">
       <div class="container">
-        <span class="section-tag">06 · Módulos & 07 · Planificación</span>
-        <h1>Cómo se organiza el trabajo</h1>
-        <p>Qué módulo se usa en cada parte del proyecto y en qué fases lo ejecutamos.</p>
+        <span class="section-tag">Proyecto Intermodular · 2º SMR</span>
+        <h1>Así se ha creado KILOBYTE S.L.</h1>
+        <p>Un proyecto integral que conecta empresa, infraestructura, virtualización, desarrollo web, servicios cloud y
+          ciberseguridad en una solución funcional.</p>
+        <div class="project-hero-actions">
+          <a href="#arquitectura" class="btn btn-primary">Ver la arquitectura</a>
+          <a href="#fases" class="btn btn-ghost">Conocer las fases</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="project-intro-grid">
+          <div class="project-intro-copy">
+            <span class="section-tag">Visión general</span>
+            <h2>De una idea de empresa a un entorno tecnológico completo</h2>
+            <p>KILOBYTE S.L. nace como Proyecto Intermodular para aplicar de forma conjunta los conocimientos de 2º de
+              Sistemas Microinformáticos y Redes. El trabajo no se limita a diseñar una web: plantea una empresa,
+              define sus servicios y construye la infraestructura necesaria para operarla.</p>
+            <p>La solución combina un <strong>laboratorio virtualizado en Proxmox</strong>, donde se alojarán las
+              máquinas virtuales de servidores, con una <strong>plataforma pública en Firebase</strong>. Esta separación
+              permite practicar administración de sistemas y, al mismo tiempo, publicar una aplicación web accesible,
+              escalable y conectada a servicios cloud.</p>
+          </div>
+          <aside class="project-facts" aria-label="Datos principales del proyecto">
+            <div><strong>2º SMR</strong><span>Proyecto Intermodular</span></div>
+            <div><strong>Proxmox</strong><span>Plataforma de virtualización</span></div>
+            <div><strong>Firebase</strong><span>Hosting y servicios web</span></div>
+            <div><strong>Firestore</strong><span>Base de datos en la nube</span></div>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-alt" id="arquitectura">
+      <div class="container">
+        <div class="section-head project-section-head">
+          <span class="section-tag">Arquitectura</span>
+          <h2>Dos entornos, un mismo proyecto</h2>
+          <p>La parte pública y el laboratorio de sistemas tienen funciones diferentes, pero forman una arquitectura
+            coherente y documentada.</p>
+        </div>
+        <div class="architecture-lanes">
+          <article class="architecture-lane">
+            <div class="architecture-lane-head">
+              <span class="architecture-icon" aria-hidden="true">☁</span>
+              <div>
+                <span class="card-photo-tag">Entorno público</span>
+                <h3>Aplicación web en Firebase</h3>
+              </div>
+            </div>
+            <div class="architecture-flow" aria-label="Flujo de la aplicación pública">
+              <div class="architecture-node"><strong>Navegador</strong><span>HTML, CSS y JavaScript</span></div>
+              <span class="architecture-arrow" aria-hidden="true">→</span>
+              <div class="architecture-node"><strong>Firebase Hosting</strong><span>Publicación y entrega de la web</span></div>
+              <span class="architecture-arrow" aria-hidden="true">→</span>
+              <div class="architecture-node"><strong>Servicios Firebase</strong><span>Auth · Firestore · AI Logic</span></div>
+            </div>
+            <p>Firebase Hosting sirve la web pública. Firebase Authentication gestiona el acceso y Cloud Firestore
+              almacena formularios, perfiles de usuario y pedidos con reglas de seguridad.</p>
+          </article>
+
+          <article class="architecture-lane architecture-lane-proxmox">
+            <div class="architecture-lane-head">
+              <span class="architecture-icon" aria-hidden="true">▣</span>
+              <div>
+                <span class="card-photo-tag">Laboratorio de sistemas</span>
+                <h3>Máquinas virtuales en Proxmox</h3>
+              </div>
+            </div>
+            <div class="architecture-flow" aria-label="Flujo del laboratorio virtualizado">
+              <div class="architecture-node"><strong>Proxmox VE</strong><span>Hipervisor central</span></div>
+              <span class="architecture-arrow" aria-hidden="true">→</span>
+              <div class="architecture-node"><strong>VM de servicios</strong><span>Windows Server y DF Server</span></div>
+              <span class="architecture-arrow" aria-hidden="true">+</span>
+              <div class="architecture-node"><strong>VM de datos</strong><span>MySQL/MariaDB y HeidiSQL</span></div>
+            </div>
+            <p>Los servidores del laboratorio se alojarán como máquinas virtuales en Proxmox. Así se pueden aislar
+              servicios, asignar recursos, crear copias de seguridad y recuperar una máquina con mayor rapidez.</p>
+          </article>
+        </div>
+        <div class="architecture-note">
+          <strong>Importante:</strong> la web pública se aloja en Firebase, no dentro de Proxmox. Proxmox se utiliza
+          para el entorno virtualizado del proyecto y las prácticas de administración de servidores.
+        </div>
       </div>
     </section>
 
@@ -53,6 +136,7 @@
         <div class="section-head">
           <span class="section-tag">06 · Módulos</span>
           <h2>Qué módulo se usa en cada parte</h2>
+          <p>Cada bloque del proyecto está vinculado con competencias reales del ciclo.</p>
         </div>
         <div class="module-list">
           <article class="module-row">
@@ -87,8 +171,8 @@
             <span class="module-num">5</span>
             <div>
               <h3>Computación en la nube y virtualización</h3>
-              <p>Crear los servidores como máquinas virtuales y usar la nube (trabajando en alojar la base de datos en
-                la nube).</p>
+              <p>Alojar los servidores como máquinas virtuales en Proxmox y conectar la aplicación con Firebase
+                Hosting, Authentication y Cloud Firestore.</p>
             </div>
           </article>
         </div>
@@ -103,6 +187,13 @@
           <p>Cada pieza del stack juega un papel concreto en el resultado final.</p>
         </div>
         <div class="grid-3">
+          <article class="card card-photo">
+            <img class="card-photo-bg" src="images/fondos/fondo_centro_datos.jpg" alt="Centro de datos virtualizado" loading="lazy">
+            <span class="card-photo-tag">Virtualización</span>
+            <h3>Proxmox VE</h3>
+            <p>Hipervisor donde se alojarán las máquinas virtuales del laboratorio, con aislamiento de servicios,
+              asignación de recursos, instantáneas y copias de seguridad.</p>
+          </article>
           <article class="card card-photo">
             <img class="card-photo-bg" src="images/contenido/df-server.webp" alt="Logo de DF Server" loading="lazy">
             <span class="card-photo-tag">Servidor</span>
@@ -134,9 +225,9 @@
           <article class="card card-photo">
             <img class="card-photo-bg" src="images/fondos/fondo_centro_datos.jpg" alt="Sala de servidores" loading="lazy">
             <span class="card-photo-tag">Nube</span>
-            <h3>Firebase</h3>
-            <p>Hosting del sitio, Authentication (email y Google), Firestore para usuarios y pedidos, y hosting de la
-              web en kilobyte-sl.web.app.</p>
+            <h3>Firebase + Firestore</h3>
+            <p>Firebase Hosting publica el sitio; Authentication controla el acceso y Cloud Firestore almacena
+              formularios, perfiles y pedidos en una base de datos gestionada en la nube.</p>
           </article>
           <article class="card card-photo">
             <img class="card-photo-bg" src="images/fondos/fondo_red_digital_azul.jpg" alt="Fondo abstracto de red digital" loading="lazy">
@@ -145,11 +236,18 @@
             <p>El chatbot del asistente de IA responde con modelos Gemini, con instrucciones de sistema que lo hacen
               experto en la empresa.</p>
           </article>
+          <article class="card card-photo">
+            <img class="card-photo-bg" src="images/fondos/fondo_placa_circuitos_azules.jpg" alt="Código y control de versiones" loading="lazy">
+            <span class="card-photo-tag">Desarrollo</span>
+            <h3>Git y GitHub</h3>
+            <p>El código se mantiene versionado en un repositorio, lo que permite revisar cambios, conservar el
+              historial y preparar despliegues controlados.</p>
+          </article>
         </div>
       </div>
     </section>
 
-    <section class="section section-alt">
+    <section class="section" id="fases">
       <div class="container">
         <div class="section-head">
           <span class="section-tag">07 · Planificación</span>
@@ -159,27 +257,27 @@
           <li class="timeline-item">
             <span class="timeline-num">1</span>
             <h3>Diseño</h3>
-            <p>Definir logo, nombre, web y base de datos.</p>
+            <p>Definir la identidad, los servicios, la estructura de contenidos y el modelo de datos.</p>
           </li>
           <li class="timeline-item">
             <span class="timeline-num">2</span>
             <h3>Servidores y red</h3>
-            <p>Instalar sistemas y servicios en máquinas virtuales.</p>
+            <p>Diseñar la red y preparar en Proxmox las máquinas virtuales para servicios y datos.</p>
           </li>
           <li class="timeline-item">
             <span class="timeline-num">3</span>
             <h3>Web y chatbot</h3>
-            <p>Crear la web, el registro de usuarios y el chatbot.</p>
+            <p>Programar la interfaz, la tienda, el registro de usuarios y el asistente con IA.</p>
           </li>
           <li class="timeline-item">
             <span class="timeline-num">4</span>
             <h3>Seguridad y nube</h3>
-            <p>Configurar firewall, SAI y copias de seguridad.</p>
+            <p>Configurar Firebase, Firestore, reglas de acceso, firewall, SAI y copias de seguridad.</p>
           </li>
           <li class="timeline-item">
             <span class="timeline-num">5</span>
             <h3>Pruebas y entrega</h3>
-            <p>Comprobar que todo funciona y presentar el proyecto.</p>
+            <p>Validar navegación, formularios, autenticación, pedidos, responsive y despliegue final.</p>
           </li>
         </ol>
       </div>
