@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description"
+    content="Política de privacidad de KILOBYTE S.L. — tratamiento de datos personales del formulario de contacto, registros y pedidos. Proyecto educativo de 2º SMR.">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Política de privacidad | KILOBYTE S.L.</title>
+  <link rel="icon" type="image/png" href="images/logo-kb.png">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="bg-ondas">
+  <header class="navbar" id="navbar">
+    <div class="container nav-inner">
+      <a href="index.html" class="logo">
+        <span class="logo-plate"><img src="images/Logotipo KB.png" alt="KILOBYTE S.L." class="logo-kb-img"></span>
+      </a>
+      <nav class="nav-links" id="navLinks">
+        <a href="index.html">Inicio</a>
+        <a href="empresa.html">La empresa</a>
+        <a href="servicios.html">Servicios</a>
+        <a href="tienda.html">Tienda</a>
+        <a href="infraestructura.html">Infraestructura</a>
+        <a href="planificacion.html">Proyecto</a>
+        <a href="contacto.html" class="nav-cta">Contacto</a>
+      </nav>
+      <button class="hamburger" id="hamburger" aria-label="Abrir menú" aria-expanded="false"><span></span></button>
+    </div>
+  </header>
+
+  <main>
+    <section class="page-hero">
+      <div class="container">
+        <span class="section-tag">Legal</span>
+        <h1>Política de privacidad</h1>
+        <p>Cómo tratamos los datos personales que recoge esta web.</p>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container" style="max-width:760px">
+        <article class="card" style="margin-bottom:1.2rem">
+          <h3>⚠️ Proyecto educativo</h3>
+          <p>Esta política corresponde a un proyecto académico de 2º SMR (IES Ribera del Tajo). Aunque la web simula una
+            empresa real, el responsable del tratamiento de los datos que se guardan es el <strong>autor del
+              proyecto</strong>, con fines exclusivamente didácticos. No hay publicidad, ni análisis de audiencia, ni
+            cesión de datos a terceros.</p>
+        </article>
+
+        <article class="card" style="margin-bottom:1.2rem">
+          <h3>Responsable</h3>
+          <ul class="check-list">
+            <li><strong>Responsable:</strong> Gonzalo Elez Villar (proyecto educativo KILOBYTE S.L.)</li>
+            <li><strong>Plataforma de datos:</strong> Google Cloud Firestore (región europe-west)</li>
+            <li><strong>Encargado de tratamiento:</strong> Google LLC, en calidad de proveedor de la infraestructura
+              Firebase</li>
+          </ul>
+        </article>
+
+        <article class="card" style="margin-bottom:1.2rem">
+          <h3>Qué datos recogemos y para qué</h3>
+          <ul class="check-list">
+            <li><strong>Formulario de contacto:</strong> nombre, email, empresa y teléfono (opcionales excepto nombre y
+              email) junto con el mensaje. Finalidad: atender tu consulta. Base jurídica: tu consentimiento expreso, que
+              se pide con una casilla antes de enviar.</li>
+            <li><strong>Registro de cuenta:</strong> nombre, email y una contraseña (guardada como hash por Firebase
+              Authentication, nunca en claro). Finalidad: identificar tu cuenta y tramitar pedidos. Base jurídica:
+              ejecución del servicio solicitado.</li>
+            <li><strong>Pedidos:</strong> los productos comprados, cantidades y totales, vinculados a tu cuenta.
+              Finalidad: registrar el pedido en la demostración. Base jurídica: ejecución del servicio.</li>
+            <li><strong>Carrito:</strong> se guarda solo en tu navegador (localStorage); no sale de tu dispositivo.</li>
+            <li><strong>Chatbot:</strong> los mensajes no se almacenan en la base de datos; se procesan en memoria para
+              generar la respuesta.</li>
+          </ul>
+        </article>
+
+        <article class="card" style="margin-bottom:1.2rem">
+          <h3>Conservación y tus derechos</h3>
+          <p>Los datos se conservan únicamente durante la evaluación del proyecto y serán eliminados después. Puedes
+            ejercer los derechos de acceso, rectificación y supresión (RGPD, arts. 15-17) escribiendo al autor a través
+            del <a href="contacto.html" style="color:var(--primary);text-decoration:underline">formulario de
+              contacto</a>,
+            o borrando tu cuenta desde el menú de usuario.</p>
+        </article>
+
+        <article class="card">
+          <h3>Cookies</h3>
+          <p>Esta web no utiliza cookies de seguimiento ni analítica. Solo se emplea <code>localStorage</code> para el
+            carrito de la compra y la sesión de usuario, imprescindibles para el funcionamiento de la tienda. Al no usar
+            analytics ni publicidad, no se requiere banner de consentimiento de cookies.</p>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-grid">
+      <div>
+        <a href="index.html" class="logo">
+          <span class="logo-plate"><img src="images/Logotipo KB extendido.png" alt="KILOBYTE S.L."></span>
+        </a>
+        <p class="footer-desc">Servicios informáticos para empresas. Tu negocio pasa de KB a GB con nosotros.</p>
+      </div>
+      <div>
+        <h4>Legal</h4>
+        <ul>
+          <li><a href="aviso-legal.html">Aviso legal</a></li>
+          <li><a href="privacidad.html">Política de privacidad</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="container">
+        <p>© 2026 KILOBYTE S.L. · Proyecto Intermodular 2º SMR · IES Ribera del Tajo · Gonzalo Elez Villar</p>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="firebase.js"></script>
+  <script src="script.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,327 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description"
+    content="Tienda de KILOBYTE S.L.: equipos para personas y empresas, servidores, redes, SAIs y equipos pequeños. Con carrito de la compra.">
+  <title>Tienda | KILOBYTE S.L.</title>
+  <link rel="icon" type="image/png" href="images/logos/logo-kb.png">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="KILOBYTE S.L.">
+  <meta property="og:title" content="Tienda | KILOBYTE S.L.">
+  <meta property="og:description" content="Tienda de KILOBYTE S.L.: equipos para personas y empresas, servidores, redes, SAIs. Con carrito.">
+  <meta property="og:url" content="https://kilobyte-sl.web.app/tienda.html">
+  <meta property="og:image" content="https://kilobyte-sl.web.app/images/contenido/Venta_equipos_y_suministros_de_computo_data_center.jpg">
+  <meta property="og:locale" content="es_ES">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="canonical" href="https://kilobyte-sl.web.app/tienda.html">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body class="bg-placa">
+  <header class="navbar" id="navbar">
+    <div class="container nav-inner">
+      <a href="index.html" class="logo">
+        <span class="logo-plate"><img src="images/logos/Logotipo_KB.png" alt="KILOBYTE S.L." class="logo-kb-img"></span>
+      </a>
+      <nav class="nav-links" id="navLinks">
+        <a href="index.html">Inicio</a>
+        <a href="empresa.html">La empresa</a>
+        <a href="servicios.html">Servicios</a>
+        <a href="tienda.html" class="active">Tienda</a>
+        <a href="infraestructura.html">Infraestructura</a>
+        <a href="planificacion.html">Proyecto</a>
+        <a href="contacto.html" class="nav-cta">Contacto</a>
+      </nav>
+      <div class="nav-right">
+        <button class="cart-btn" id="cartBtn" aria-label="Abrir carrito de la compra">
+          🛒 <span class="cart-count" id="cartCount">0</span>
+        </button>
+        <button class="hamburger" id="hamburger" aria-label="Abrir menú" aria-expanded="false"><span></span></button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="page-hero">
+      <div class="container">
+        <span class="section-tag">Equipos informáticos</span>
+        <h1>Tienda KILOBYTE</h1>
+        <p>El equipamiento que vendemos: equipos para personas y para empresas, servidores, material de red, SAIs y
+          equipos pequeños.
+          Añade al carrito lo que necesites y te preparamos el pedido.</p>
+        <div class="shop-stats">
+          <div class="shop-stat"><strong>17</strong><span>productos en catálogo</span></div>
+          <div class="shop-stat"><strong>✓</strong><span>instalación opcional incluida</span></div>
+          <div class="shop-stat"><strong>🇪🇸</strong><span>envío a toda España</span></div>
+          <div class="shop-stat"><strong>2 años</strong><span>de garantía y soporte</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <!-- Filtros de categoría -->
+        <div class="shop-filters" id="shopFilters">
+          <button class="filter-chip active" data-cat="all">Todo</button>
+          <button class="filter-chip" data-cat="hogar">Para personas</button>
+          <button class="filter-chip" data-cat="servidor">Servidores</button>
+          <button class="filter-chip" data-cat="sai">SAIs</button>
+          <button class="filter-chip" data-cat="red">Redes</button>
+          <button class="filter-chip" data-cat="mini">Equipos pequeños</button>
+        </div>
+
+        <!-- Catálogo -->
+        <div class="shop-grid" id="shopGrid"></div>
+        <p class="shop-empty" id="shopEmpty" hidden>No hay productos en esta categoría.</p>
+      </div>
+    </section>
+
+    <section class="section section-alt">
+      <div class="container">
+        <div class="note-banner">
+          🛠️ <strong>¿Lo quieres instalado?</strong> Todos nuestros equipos pueden incluir instalación, configuración
+          de red y dominio por nuestro equipo de soporte. Pídelo en el carrito o <a href="contacto.html"
+            style="color:var(--primary);font-weight:600">escríbenos</a>.
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="section-head">
+          <span class="section-tag">Garantías</span>
+          <h2>Compra con confianza</h2>
+          <p>Detrás de cada producto hay un servicio, no solo una caja.</p>
+        </div>
+        <div class="grid-2">
+          <article class="card card-photo">
+            <img class="card-photo-bg" src="images/contenido/Venta_equipos_y_suministros_de_computo_data_center.jpg" alt="Servidores y equipos de data center" loading="lazy">
+            <span class="card-photo-tag">Entrega</span>
+            <h3>Entrega y puesta en marcha</h3>
+            <p>Enviamos a toda España y, si lo pides, nuestro equipo instala y configura el equipo en tu oficina: red,
+              dominio, correo y copias de seguridad listas el primer día.</p>
+          </article>
+          <article class="card card-photo">
+            <img class="card-photo-bg" src="images/fondos/fondo_ciberseguridad.jpg" alt="Fondo de ciberseguridad" loading="lazy">
+            <span class="card-photo-tag">Garantía</span>
+            <h3>Garantía y soporte</h3>
+            <p>Todos los equipos incluyen garantía de fabricante, y si compras con nosotros también cuentas con nuestro
+              soporte: si algo falla, hablas con nosotros, no con un call center.</p>
+          </article>
+          <article class="card card-photo">
+            <img class="card-photo-bg" src="images/fondos/fondo_placa_circuitos_azules.jpg" alt="Fondo de placa de circuitos azules" loading="lazy">
+            <span class="card-photo-tag">A medida</span>
+            <h3>Configurable a medida</h3>
+            <p>Cada producto tiene variantes de memoria y almacenamiento para ajustarse a tu uso y presupuesto. ¿Y si
+              necesitas algo diferente? Escríbenos y lo montamos.</p>
+          </article>
+          <article class="card card-photo">
+            <img class="card-photo-bg" src="images/fondos/fondo_centro_datos.jpg" alt="Sala de servidores" loading="lazy">
+            <span class="card-photo-tag">Empresas</span>
+            <h3>Especialistas en empresas</h3>
+            <p>No solo vendemos cajas: asesoramos qué servidor, SAI o rack encaja con tu tamaño de empresa y tu plan de
+              crecimiento, de KB a GB.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-grid">
+      <div>
+        <a href="index.html" class="logo">
+          <span class="logo-plate"><img src="images/logos/Logotipo_KB_extendido.png" alt="KILOBYTE S.L."></span>
+        </a>
+        <p class="footer-desc">Servicios informáticos para empresas. Tu negocio pasa de KB a GB con nosotros.</p>
+      </div>
+      <div>
+        <h4>Navegación</h4>
+        <ul>
+          <li><a href="index.html">Inicio</a></li>
+          <li><a href="empresa.html">La empresa</a></li>
+          <li><a href="servicios.html">Servicios</a></li>
+          <li><a href="tienda.html">Tienda</a></li>
+          <li><a href="infraestructura.html">Infraestructura</a></li>
+          <li><a href="planificacion.html">Proyecto</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Servicios</h4>
+        <ul>
+          <li><a href="servicios.html#soporte">Soporte informático</a></li>
+          <li><a href="servicios.html#sophos">Sophos Firewall</a></li>
+          <li><a href="servicios.html#dfserver">DF Server</a></li>
+          <li><a href="servicios.html#equipos">Equipos informáticos</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Contacto</h4>
+        <ul>
+          <li><a href="contacto.html">Formulario de contacto</a></li>
+          <li><a href="contacto.html">Servicio al cliente</a></li>        </ul>
+      </div>
+      <div>
+        <h4>Legal</h4>
+        <ul>
+          <li><a href="aviso-legal.html">Aviso legal</a></li>
+          <li><a href="privacidad.html">Política de privacidad</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="container">
+        <p>© 2026 KILOBYTE S.L. · Proyecto Intermodular 2º SMR · IES Ribera del Tajo · Gonzalo Elez Villar</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Panel lateral de detalle del producto -->
+  <div class="cart-overlay detail-overlay" id="detailOverlay"></div>
+  <aside class="cart-panel detail-panel" id="productDetail" role="dialog" aria-label="Detalles del producto" aria-modal="false">
+    <div class="cart-header">
+      <h3>Ficha del equipo</h3>
+      <button class="chat-close" id="detailClose" aria-label="Cerrar detalles">×</button>
+    </div>
+    <div class="detail-body">
+      <div class="detail-head">
+        <span class="detail-icon" id="detailIcon">🖥️</span>
+        <div>
+          <span class="product-tag" id="detailTag">Tag</span>
+          <h3 id="detailName">Producto</h3>
+        </div>
+      </div>
+      <p class="detail-desc" id="detailDesc">Descripción</p>
+      <h4 class="detail-subtitle">Especificaciones</h4>
+      <ul class="detail-specs" id="detailSpecs"></ul>
+      <h4 class="detail-subtitle" id="variantTitle">Elige la configuración</h4>
+      <div class="detail-variants" id="detailVariants"></div>
+    </div>
+    <div class="cart-summary detail-foot">
+      <div class="detail-price-row">
+        <span>Precio</span>
+        <strong class="detail-price" id="detailPrice">0,00 €</strong>
+      </div>
+      <button class="btn btn-primary btn-block" id="detailAddBtn">Añadir al carrito 🛒</button>
+    </div>
+  </aside>
+
+  <!-- Botón flotante carrito (móvil) -->
+  <button class="chat-fab" id="chatFab" aria-label="Abrir chat de ayuda">
+    <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2"
+      stroke-linecap="round" stroke-linejoin="round">
+      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+    </svg>
+  </button>
+
+  <div class="chatbot" id="chatbot" role="dialog" aria-modal="false" aria-label="Chatbot de ayuda">
+    <div class="chat-header">
+      <div class="chat-avatar">KB</div>
+      <div>
+        <strong>Chatbot KILOBYTE</strong>
+        <small>Conoce la web · siempre en línea</small>
+      </div>
+      <button class="chat-close" id="chatClose" aria-label="Cerrar chat">×</button>
+    </div>
+    <div class="chat-body" id="chatBody" aria-live="polite"></div>
+    <div class="chat-suggestions" id="chatSuggestions"></div>
+    <form class="chat-input" id="chatForm">
+      <input type="text" id="chatInput" placeholder="Escribe tu pregunta..." autocomplete="off">
+      <button type="submit" aria-label="Enviar">➤</button>
+    </form>
+  </div>
+
+  <!-- Panel lateral del carrito -->
+  <div class="cart-overlay" id="cartOverlay"></div>
+  <aside class="cart-panel" id="cartPanel" role="dialog" aria-label="Carrito de la compra" aria-modal="false">
+    <div class="cart-header">
+      <h3>🛒 Tu carrito</h3>
+      <button class="chat-close" id="cartClose" aria-label="Cerrar carrito">×</button>
+    </div>
+    <div class="cart-items" id="cartItems">
+      <p class="cart-empty" id="cartEmpty">Tu carrito está vacío. Añade productos desde el catálogo. 🛒</p>
+    </div>
+    <div class="cart-summary" id="cartSummary" hidden>
+      <div class="cart-line"><span>Subtotal</span><span id="cartSubtotal">0,00 €</span></div>
+      <div class="cart-line cart-line-iva"><span>IVA (21 %)</span><span id="cartIva">0,00 €</span></div>
+      <div class="cart-line cart-line-total"><span>Total</span><span id="cartTotal">0,00 €</span></div>
+      <button class="btn btn-primary btn-block" id="checkoutBtn">Tramitar pedido</button>
+      <button class="btn btn-ghost btn-block" id="clearCartBtn">Vaciar carrito</button>
+      <p class="form-success" id="checkoutMsg" hidden>✅ ¡Pedido registrado! Te contactaremos para confirmar la entrega y
+        el pago.</p>
+    </div>
+  </aside>
+
+  <!-- Modal de registro / inicio de sesión -->
+  <div class="auth-overlay" id="authOverlay"></div>
+  <div class="auth-modal" id="authModal" role="dialog" aria-modal="true" aria-label="Iniciar sesión o registrarse">
+    <div class="auth-card">
+      <button class="chat-close auth-close" id="authClose" aria-label="Cerrar">×</button>
+      <div class="auth-head">
+        <span class="logo-plate"><img src="images/logos/Logotipo_KB_extendido.png" alt="KILOBYTE S.L."></span>
+        <h3 id="authTitle">Inicia sesión para continuar</h3>
+        <p class="auth-sub">Para tramitar tu pedido necesitas una cuenta en KILOBYTE S.L.</p>
+      </div>
+      <div class="auth-tabs">
+        <button class="auth-tab active" id="tabLogin" type="button">Iniciar sesión</button>
+        <button class="auth-tab" id="tabRegister" type="button">Registrarse</button>
+      </div>
+
+      <!-- Formulario de inicio de sesión -->
+      <form id="loginForm" novalidate>
+        <div class="form-field">
+          <label for="loginEmail">Usuario o email</label>
+          <input type="text" id="loginEmail" placeholder="admin o tu@email.com" autocomplete="username" required>
+        </div>
+        <div class="form-field">
+          <label for="loginPass">Contraseña</label>
+          <input type="password" id="loginPass" placeholder="Tu contraseña" autocomplete="current-password" required>
+        </div>
+        <p class="auth-error" id="loginError" hidden></p>
+        <button class="btn btn-primary btn-block" type="submit">Entrar</button>
+      </form>
+      <div class="auth-divider">o</div>
+      <button class="btn btn-google btn-block" id="googleLoginBtn" type="button">🔐 Continuar con Google</button>
+
+      <!-- Formulario de registro -->
+      <form id="registerForm" hidden novalidate>
+        <div class="form-field">
+          <label for="regName">Nombre y apellidos</label>
+          <input type="text" id="regName" placeholder="Nombre completo" autocomplete="name" required>
+        </div>
+        <div class="form-field">
+          <label for="regEmail">Email</label>
+          <input type="email" id="regEmail" placeholder="tu@email.com" autocomplete="email" required>
+        </div>
+        <div class="form-field">
+          <label for="regPass">Contraseña</label>
+          <input type="password" id="regPass" placeholder="Mínimo 6 caracteres" autocomplete="new-password" required>
+        </div>
+        <div class="form-field">
+          <label for="regPass2">Confirmar contraseña</label>
+          <input type="password" id="regPass2" placeholder="Repite la contraseña" autocomplete="new-password" required>
+        </div>
+        <p class="auth-error" id="registerError" hidden></p>
+        <div class="form-field">
+          <label class="consent-label">
+            <input type="checkbox" id="regPrivacidad" required>
+            <span>Acepto la <a href="privacidad.html" style="color:var(--primary);text-decoration:underline">política de
+                privacidad</a> y el tratamiento de mis datos. *</span>
+          </label>
+        </div>
+        <p class="auth-error" id="registerError2" hidden></p>
+        <button class="btn btn-primary btn-block" type="submit">Crear cuenta</button>
+      </form>
+      <div class="auth-divider">o</div>
+      <button class="btn btn-google btn-block" id="googleRegisterBtn" type="button">🔐 Registrarse con Google</button>
+    </div>
+  </div>
+
+  <script type="module" src="js/firebase.js"></script>
+    <script src="js/script.js"></script>
+</body>
+
+</html>

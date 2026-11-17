@@ -1,0 +1,276 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description"
+    content="Infraestructura de KILOBYTE S.L.: servidores web y de datos, máquinas virtuales, SAIs y base de datos MySQL/MariaDB gestionada con HeidiSQL.">
+  <title>Infraestructura | KILOBYTE S.L.</title>
+  <link rel="icon" type="image/png" href="images/logos/logo-kb.png">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="KILOBYTE S.L.">
+  <meta property="og:title" content="Infraestructura | KILOBYTE S.L.">
+  <meta property="og:description" content="Infraestructura de KILOBYTE S.L.: servidores web y de datos, virtualización, SAIs y base de datos MySQL/MariaDB gestionada con HeidiSQL.">
+  <meta property="og:url" content="https://kilobyte-sl.web.app/infraestructura.html">
+  <meta property="og:image" content="https://kilobyte-sl.web.app/images/fondos/fondo_centro_datos.jpg">
+  <meta property="og:locale" content="es_ES">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="canonical" href="https://kilobyte-sl.web.app/infraestructura.html">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body class="bg-centro-datos">
+  <header class="navbar" id="navbar">
+    <div class="container nav-inner">
+      <a href="index.html" class="logo">
+        <span class="logo-plate"><img src="images/logos/Logotipo_KB.png" alt="KILOBYTE S.L." class="logo-kb-img"></span>
+      </a>
+      <nav class="nav-links" id="navLinks">
+        <a href="index.html">Inicio</a>
+        <a href="empresa.html">La empresa</a>
+        <a href="servicios.html">Servicios</a>
+        <a href="tienda.html">Tienda</a>
+        <a href="infraestructura.html" class="active">Infraestructura</a>
+        <a href="planificacion.html">Proyecto</a>
+        <a href="contacto.html" class="nav-cta">Contacto</a>
+      </nav>
+      <button class="hamburger" id="hamburger" aria-label="Abrir menú" aria-expanded="false"><span></span></button>
+    </div>
+  </header>
+
+  <main>
+    <section class="page-hero">
+      <div class="container">
+        <span class="section-tag">04 · Base de datos & 05 · Infraestructura</span>
+        <h1>¿Cómo trabajamos?</h1>
+        <p>Que todo siga funcionando: servidores, base de datos y una disponibilidad asegurada.</p>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="section-head">
+          <span class="section-tag">Infraestructura</span>
+          <h2>Nuestros sistemas</h2>
+        </div>
+        <div class="grid-2">
+          <article class="card card-photo">
+            <img class="card-photo-bg" src="images/fondos/fondo_ondas_azul_marino.jpg" alt="Fondo abstracto de ondas azul marino" loading="lazy">
+            <span class="card-photo-tag">Web</span>
+            <h3>Servidor web</h3>
+            <p>Aloja la página web corporativa y el chatbot de ayuda de la empresa. La versión pública se sirve además
+              desde <strong>Firebase Hosting</strong> (CDN de Google) para carga rápida y alta disponibilidad; los datos
+              del formulario, las cuentas y los pedidos se guardan en <strong>Firestore</strong> y se replican en
+              nuestro servidor de datos.</p>
+          </article>
+          <article class="card card-photo">
+            <img class="card-photo-bg" src="images/fondos/fondo_placa_circuitos_azules.jpg" alt="Fondo de placa de circuitos azules" loading="lazy">
+            <span class="card-photo-tag">Datos</span>
+            <h3>Servidor de datos</h3>
+            <p>Guarda la base de datos de la empresa donde vive toda nuestra información.</p>
+          </article>
+          <article class="card card-photo">
+            <img class="card-photo-bg" src="images/fondos/fondo_centro_datos.jpg" alt="Sala de servidores" loading="lazy">
+            <span class="card-photo-tag">Virtualización</span>
+            <h3>Máquinas virtuales</h3>
+            <p>Los servidores se crean en un entorno virtual, lo que permite escalar y recuperar fácilmente.</p>
+          </article>
+          <article class="card card-photo">
+            <img class="card-photo-bg" src="images/contenido/SAI.png" alt="SAI de protección eléctrica" loading="lazy">
+            <span class="card-photo-tag">SAI</span>
+            <h3>SAIs</h3>
+            <p>Nuestra disponibilidad está asegurada con sistemas de alimentación ininterrumpida.</p>
+          </article>
+        </div>
+        <figure class="infra-photo">
+          <img src="images/fondos/fondo_centro_datos.jpg"
+            alt="Servidores montados en rack dentro de nuestro data center">
+          <figcaption>Nuestra sala técnica: racks de servidores, red y alimentación protegida.</figcaption>
+        </figure>
+        <div class="note-banner">
+          ☁️ <strong>La nube:</strong> todavía estamos trabajando para implementar los servicios de la empresa en la
+          nube y decidir de qué manera hacerlo.
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-alt">
+      <div class="container">
+        <div class="section-head">
+          <span class="section-tag">04 · Base de datos</span>
+          <h2>Base de datos MySQL/MariaDB, gestionada con HeidiSQL</h2>
+          <p>Nuestra base de datos funciona sobre el motor <strong>MySQL/MariaDB</strong>, y la administramos con
+            <strong>HeidiSQL</strong>, el cliente gráfico que hemos escogido por ser más intuitivo y cómodo para
+            trabajar. Aquí guardamos toda la información de la empresa, organizada en <strong>8 tablas</strong>. Los
+            datos que llegan de la web (contactos, cuentas y pedidos) se gestionan con <strong>Firestore</strong> y se
+            replican en estas tablas para el trabajo diario del proyecto.</p>
+        </div>
+        <div class="db-tables">
+          <span class="db-chip">🧑‍💼 Clientes</span>
+          <span class="db-chip">🖥️ Equipos</span>
+          <span class="db-chip">🔑 Licencias</span>
+          <span class="db-chip">🧾 Registro de soporte</span>
+          <span class="db-chip">📄 Facturas</span>
+          <span class="db-chip">📝 Contratos de mantenimiento</span>
+          <span class="db-chip">⚖️ Leyes</span>
+          <span class="db-chip">💼 Planes de empresa</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="section-head">
+          <span class="section-tag">Continuidad</span>
+          <h2>¿Cómo garantizamos que nada se pare?</h2>
+          <p>Tres capas de protección que evitan que un fallo deje a un cliente sin servicio.</p>
+        </div>
+        <div class="grid-3">
+          <article class="card">
+            <div class="card-icon">⚡</div>
+            <h3>Alimentación con SAI</h3>
+            <p>Un corte de luz no apaga los servidores: los SAIs mantienen el sistema funcionando el tiempo suficiente
+              para un apagado controlado, y protegen contra picos de tensión.</p>
+          </article>
+          <article class="card">
+            <div class="card-icon">📦</div>
+            <h3>Virtualización</h3>
+            <p>Servidor web y servidor de datos corren en máquinas virtuales: si una falla, se restaura en minutos desde
+              una copia sin depender del hardware físico.</p>
+          </article>
+          <article class="card">
+            <div class="card-icon">💾</div>
+            <h3>Copias de seguridad</h3>
+            <p>La base de datos y los archivos críticos se respaldan de forma programada, de modo que la información de
+              la empresa y de nuestros clientes sobrevive a cualquier incidente.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-alt">
+      <div class="container">
+        <div class="section-head">
+          <span class="section-tag">Seguridad</span>
+          <h2>Protección de la infraestructura</h2>
+          <p>La misma tecnología que ofrecemos a nuestros clientes protege nuestros propios sistemas.</p>
+        </div>
+        <div class="grid-2">
+          <article class="card">
+            <div class="card-icon">🛡️</div>
+            <h3>Firewall perimetral</h3>
+            <p>Todo el tráfico entrante pasa por nuestro Sophos Firewall: bloquea accesos no autorizados y controla qué
+              servicios están expuestos a internet.</p>
+          </article>
+          <article class="card">
+            <div class="card-icon">🔐</div>
+            <h3>Accesos controlados</h3>
+            <p>Cada usuario tiene su cuenta y sus permisos en el dominio. La base de datos no se toca "a mano": solo las
+              aplicaciones autorizadas escriben en ella.</p>
+          </article>
+          <article class="card">
+            <div class="card-icon">🧾</div>
+            <h3>Registro de actividad</h3>
+            <p>Los accesos y los cambios relevantes quedan registrados, lo que permite auditar qué pasó y cuándo si
+              surge cualquier incidencia de seguridad.</p>
+          </article>
+          <article class="card">
+            <div class="card-icon">☁️</div>
+            <h3>Camino a la nube</h3>
+            <p>Evaluamos llevar parte de los servicios a la nube para escalar mejor: la web ya se sirve desde Firebase
+              Hosting y los datos de usuarios y pedidos viven en Firestore.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="cta-band">
+      <div class="container cta-inner">
+        <div>
+          <h2>¿Quieres saber cómo lo montamos?</h2>
+          <p>Consulta el proyecto: módulos y fases de trabajo.</p>
+        </div>
+        <a href="planificacion.html" class="btn btn-light">Ver el proyecto</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-grid">
+      <div>
+        <a href="index.html" class="logo">
+          <span class="logo-plate"><img src="images/logos/Logotipo_KB_extendido.png" alt="KILOBYTE S.L."></span>
+        </a>
+        <p class="footer-desc">Servicios informáticos para empresas. Tu negocio pasa de KB a GB con nosotros.</p>
+      </div>
+      <div>
+        <h4>Navegación</h4>
+        <ul>
+          <li><a href="index.html">Inicio</a></li>
+          <li><a href="empresa.html">La empresa</a></li>
+          <li><a href="servicios.html">Servicios</a></li>
+          <li><a href="tienda.html">Tienda</a></li>
+          <li><a href="infraestructura.html">Infraestructura</a></li>
+          <li><a href="planificacion.html">Proyecto</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Servicios</h4>
+        <ul>
+          <li><a href="servicios.html#soporte">Soporte informático</a></li>
+          <li><a href="servicios.html#sophos">Sophos Firewall</a></li>
+          <li><a href="servicios.html#dfserver">DF Server</a></li>
+          <li><a href="servicios.html#equipos">Equipos informáticos</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Contacto</h4>
+        <ul>
+          <li><a href="contacto.html">Formulario de contacto</a></li>
+          <li><a href="contacto.html">Servicio al cliente</a></li>        </ul>
+      </div>
+      <div>
+        <h4>Legal</h4>
+        <ul>
+          <li><a href="aviso-legal.html">Aviso legal</a></li>
+          <li><a href="privacidad.html">Política de privacidad</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="container">
+        <p>© 2026 KILOBYTE S.L. · Proyecto Intermodular 2º SMR · IES Ribera del Tajo · Gonzalo Elez Villar</p>
+      </div>
+    </div>
+  </footer>
+
+  <button class="chat-fab" id="chatFab" aria-label="Abrir chat de ayuda">
+    <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2"
+      stroke-linecap="round" stroke-linejoin="round">
+      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+    </svg>
+  </button>
+
+  <div class="chatbot" id="chatbot" role="dialog" aria-modal="false" aria-label="Chatbot de ayuda">
+    <div class="chat-header">
+      <div class="chat-avatar">KB</div>
+      <div>
+        <strong>Chatbot KILOBYTE</strong>
+        <small>Conoce la web · siempre en línea</small>
+      </div>
+      <button class="chat-close" id="chatClose" aria-label="Cerrar chat">×</button>
+    </div>
+    <div class="chat-body" id="chatBody" aria-live="polite"></div>
+    <div class="chat-suggestions" id="chatSuggestions"></div>
+    <form class="chat-input" id="chatForm">
+      <input type="text" id="chatInput" placeholder="Escribe tu pregunta..." autocomplete="off">
+      <button type="submit" aria-label="Enviar">➤</button>
+    </form>
+  </div>
+
+  <script type="module" src="js/firebase.js"></script>
+    <script src="js/script.js"></script>
+</body>
+
+</html>

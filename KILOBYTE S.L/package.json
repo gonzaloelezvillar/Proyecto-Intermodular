@@ -1,0 +1,10 @@
+{
+  "name": "kilobyte-sl-web",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Sitio web estático de KILOBYTE S.L. (Proyecto Intermodular 2º SMR) con Firebase Hosting/Firestore/Auth.",
+  "scripts": {
+    "serve": "npx firebase-tools serve --only hosting",
+    "deploy": "npx firebase-tools deploy"
+  }
+}

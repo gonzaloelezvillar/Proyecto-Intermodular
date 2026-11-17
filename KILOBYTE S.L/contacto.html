@@ -1,0 +1,258 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description"
+    content="Contacta con KILOBYTE S.L.: servicio al cliente, soporte informático y consultas generales.">
+  <title>Contacto | KILOBYTE S.L.</title>
+  <link rel="icon" type="image/png" href="images/logos/logo-kb.png">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="KILOBYTE S.L.">
+  <meta property="og:title" content="Contacto | KILOBYTE S.L.">
+  <meta property="og:description" content="Contacta con KILOBYTE S.L.: soporte, seguridad, equipos o asesoría. Respondemos lo antes posible.">
+  <meta property="og:url" content="https://kilobyte-sl.web.app/contacto.html">
+  <meta property="og:image" content="https://kilobyte-sl.web.app/images/fondos/fondo_ondas_azul_marino.jpg">
+  <meta property="og:locale" content="es_ES">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="canonical" href="https://kilobyte-sl.web.app/contacto.html">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body class="bg-ciberseguridad">
+  <header class="navbar" id="navbar">
+    <div class="container nav-inner">
+      <a href="index.html" class="logo">
+        <span class="logo-plate"><img src="images/logos/Logotipo_KB.png" alt="KILOBYTE S.L." class="logo-kb-img"></span>
+      </a>
+      <nav class="nav-links" id="navLinks">
+        <a href="index.html">Inicio</a>
+        <a href="empresa.html">La empresa</a>
+        <a href="servicios.html">Servicios</a>
+        <a href="tienda.html">Tienda</a>
+        <a href="infraestructura.html">Infraestructura</a>
+        <a href="planificacion.html">Proyecto</a>
+        <a href="contacto.html" class="nav-cta active">Contacto</a>
+      </nav>
+      <button class="hamburger" id="hamburger" aria-label="Abrir menú" aria-expanded="false"><span></span></button>
+    </div>
+  </header>
+
+  <main>
+    <section class="page-hero">
+      <div class="container">
+        <span class="section-tag">Servicio al cliente</span>
+        <h1>Contáctanos</h1>
+        <p>Cuéntanos qué necesita tu empresa: soporte, seguridad, equipos o una asesoría. Te respondemos lo antes
+          posible.</p>
+        <p style="font-size:.85rem;color:#7fd8f5;margin-top:.6rem">⚠️ Proyecto educativo de 2º SMR: los datos de contacto
+          son ficticios; usa el formulario para ponerte en contacto con nosotros.</p>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container contact-grid">
+        <form class="contact-form" id="contactForm" novalidate>
+          <h2>Formulario de contacto</h2>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="nombre">Nombre *</label>
+              <input type="text" id="nombre" name="nombre" required placeholder="Tu nombre">
+              <small class="error-msg"></small>
+            </div>
+            <div class="form-group">
+              <label for="empresa">Empresa</label>
+              <input type="text" id="empresa" name="empresa" placeholder="Nombre de tu empresa">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="email">Email *</label>
+              <input type="email" id="email" name="email" required placeholder="tu@empresa.com">
+              <small class="error-msg"></small>
+            </div>
+            <div class="form-group">
+              <label for="telefono">Teléfono</label>
+              <input type="tel" id="telefono" name="telefono" placeholder="600 000 000">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="motivo">Motivo *</label>
+            <select id="motivo" name="motivo" required>
+              <option value="">Selecciona un servicio...</option>
+              <option value="soporte">Soporte informático completo</option>
+              <option value="sophos">Sophos Firewall (seguridad)</option>
+              <option value="dfserver">DF Server</option>
+              <option value="equipos">Equipos informáticos</option>
+              <option value="asesoria">Asesoría de infraestructura y red</option>
+              <option value="otro">Otro</option>
+            </select>
+            <small class="error-msg"></small>
+          </div>
+          <div class="form-group">
+            <label for="mensaje">Mensaje *</label>
+            <textarea id="mensaje" name="mensaje" rows="5" required
+              placeholder="Describe tu caso: qué necesitas y cómo podemos ayudarte."></textarea>
+            <small class="error-msg"></small>
+          </div>
+          <div class="form-group consent-group">
+            <label class="consent-label">
+              <input type="checkbox" id="privacidad" name="privacidad" required>
+              <span>He leído y acepto la <a href="privacidad.html" style="color:var(--primary);text-decoration:underline">política de
+                  privacidad</a> y el tratamiento de mis datos. *</span>
+            </label>
+            <small class="error-msg"></small>
+          </div>
+          <button type="submit" class="btn btn-primary btn-block">Enviar mensaje</button>
+          <p class="form-success" id="formSuccess" hidden>✅ ¡Mensaje enviado! Te contactaremos lo antes posible.</p>
+        </form>
+
+        <aside class="contact-info">
+          <h2>Datos de contacto</h2>
+          <div class="info-item"><span class="info-icon">🏢</span>
+            <div><strong>KILOBYTE S.L.</strong>
+              <p>Empresa de servicios informáticos</p>
+            </div>
+          </div>
+          <div class="info-item"><span class="info-icon">✉️</span>
+            <div><strong>Email</strong>
+              <p><a href="mailto:info@kilobyte.es" style="color:var(--primary)">info@kilobyte.es</a></p>
+            </div>
+          </div>
+          <div class="info-item"><span class="info-icon">📞</span>
+            <div><strong>Teléfono</strong>
+              <p><a href="tel:+34900000000" style="color:var(--primary)">900 000 000</a> · Horario de atención</p>
+            </div>
+          </div>
+          <div class="info-item"><span class="info-icon">📍</span>
+            <div><strong>Ubicación</strong>
+              <p>IES Ribera del Tajo · Talavera de la Reina (Toledo)</p>
+            </div>
+          </div>
+          <div class="info-item"><span class="info-icon">⏰</span>
+            <div><strong>Horario</strong>
+              <p>Lunes a viernes, 9:00 – 18:00</p>
+            </div>
+          </div>
+          <div class="info-card">
+            <h3>💡 ¿Problemas urgentes?</h3>
+            <p>Si es una incidencia de software, también puedes abrir el chatbot de ayuda en la esquina de la web:
+              conoce la web y responde al momento.</p>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="section section-alt">
+      <div class="container">
+        <div class="section-head">
+          <span class="section-tag">Antes de escribir</span>
+          <h2>¿Qué pasa cuando nos contactas?</h2>
+          <p>Un proceso sencillo y transparente desde el primer mensaje.</p>
+        </div>
+        <div class="grid-3">
+          <article class="card card-photo">
+            <img class="card-photo-bg" src="images/fondos/fondo_ondas_azul_marino.jpg" alt="Fondo abstracto de ondas azul marino" loading="lazy">
+            <span class="card-photo-tag">Paso 1</span>
+            <h3>1. Recibimos tu mensaje</h3>
+            <p>El formulario guarda tu solicitud en la base de datos de la web (Firestore), con fecha y hora, para que
+              no se pierda ninguna petición.</p>
+          </article>
+          <article class="card card-photo">
+            <img class="card-photo-bg" src="images/fondos/fondo_placa_circuitos_azules.jpg" alt="Fondo de placa de circuitos azules" loading="lazy">
+            <span class="card-photo-tag">Paso 2</span>
+            <h3>2. Analizamos tu caso</h3>
+            <p>Revisamos lo que necesitas y, si falta algún detalle, te llamamos o te escribimos para aclararlo antes
+              de proponer nada.</p>
+          </article>
+          <article class="card card-photo">
+            <img class="card-photo-bg" src="images/fondos/fondo_red_digital_azul.jpg" alt="Fondo abstracto de red digital" loading="lazy">
+            <span class="card-photo-tag">Paso 3</span>
+            <h3>3. Te enviamos una propuesta</h3>
+            <p>Con un presupuesto claro y sin compromiso: qué haremos, con qué material y en qué plazo. Tú decides si
+              adelante.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-grid">
+      <div>
+        <a href="index.html" class="logo">
+          <span class="logo-plate"><img src="images/logos/Logotipo_KB_extendido.png" alt="KILOBYTE S.L."></span>
+        </a>
+        <p class="footer-desc">Servicios informáticos para empresas. Tu negocio pasa de KB a GB con nosotros.</p>
+      </div>
+      <div>
+        <h4>Navegación</h4>
+        <ul>
+          <li><a href="index.html">Inicio</a></li>
+          <li><a href="empresa.html">La empresa</a></li>
+          <li><a href="servicios.html">Servicios</a></li>
+          <li><a href="tienda.html">Tienda</a></li>
+          <li><a href="infraestructura.html">Infraestructura</a></li>
+          <li><a href="planificacion.html">Proyecto</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Servicios</h4>
+        <ul>
+          <li><a href="servicios.html#soporte">Soporte informático</a></li>
+          <li><a href="servicios.html#sophos">Sophos Firewall</a></li>
+          <li><a href="servicios.html#dfserver">DF Server</a></li>
+          <li><a href="servicios.html#equipos">Equipos informáticos</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Contacto</h4>
+        <ul>
+          <li><a href="contacto.html">Formulario de contacto</a></li>
+          <li><a href="contacto.html">Servicio al cliente</a></li>        </ul>
+      </div>
+      <div>
+        <h4>Legal</h4>
+        <ul>
+          <li><a href="aviso-legal.html">Aviso legal</a></li>
+          <li><a href="privacidad.html">Política de privacidad</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="container">
+        <p>© 2026 KILOBYTE S.L. · Proyecto Intermodular 2º SMR · IES Ribera del Tajo · Gonzalo Elez Villar</p>
+      </div>
+    </div>
+  </footer>
+
+  <button class="chat-fab" id="chatFab" aria-label="Abrir chat de ayuda">
+    <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2"
+      stroke-linecap="round" stroke-linejoin="round">
+      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+    </svg>
+  </button>
+
+  <div class="chatbot" id="chatbot" role="dialog" aria-modal="false" aria-label="Chatbot de ayuda">
+    <div class="chat-header">
+      <div class="chat-avatar">KB</div>
+      <div>
+        <strong>Chatbot KILOBYTE</strong>
+        <small>Conoce la web · siempre en línea</small>
+      </div>
+      <button class="chat-close" id="chatClose" aria-label="Cerrar chat">×</button>
+    </div>
+    <div class="chat-body" id="chatBody" aria-live="polite"></div>
+    <div class="chat-suggestions" id="chatSuggestions"></div>
+    <form class="chat-input" id="chatForm">
+      <input type="text" id="chatInput" placeholder="Escribe tu pregunta..." autocomplete="off">
+      <button type="submit" aria-label="Enviar">➤</button>
+    </form>
+  </div>
+
+  <script type="module" src="js/firebase.js"></script>
+    <script src="js/script.js"></script>
+</body>
+
+</html>
