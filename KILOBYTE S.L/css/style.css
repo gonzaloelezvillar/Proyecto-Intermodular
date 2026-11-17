@@ -91,6 +91,12 @@ h1, h2, h3, h4 { line-height: 1.2; letter-spacing: -.02em; }
   transition: box-shadow .25s ease;
 }
 .navbar.scrolled { box-shadow: 0 6px 24px rgba(0, 0, 0, .35); }
+.demo-notice {
+  display: flex; align-items: center; justify-content: center; gap: .8rem;
+  padding: .45rem 1rem; border-bottom: 1px solid rgba(34, 211, 238, .2);
+  background: #0d1b2c; color: var(--text-muted); font-size: .78rem; letter-spacing: .02em;
+}
+.demo-notice a { color: var(--primary); font-weight: 700; text-decoration: underline; text-underline-offset: 3px; }
 .nav-inner { display: flex; align-items: center; justify-content: space-between; padding: .8rem 0; }
 .logo { display: flex; align-items: center; gap: .6rem; }
 /* Logotipo oficial sobre placa clara: cuadrado (KB) en el header, extendido en el pie y el modal */
@@ -411,6 +417,8 @@ h1, h2, h3, h4 { line-height: 1.2; letter-spacing: -.02em; }
 }
 .form-group.invalid .consent-label { color: #e04646 !important; }
 .form-success { margin-top: 1rem; color: #6fe0a8; font-weight: 600; }
+.form-success.is-error { color: #ff9d94; }
+.btn:disabled { cursor: wait; opacity: .65; transform: none; box-shadow: none; }
 .contact-info h2 { margin-bottom: 1.2rem; }
 .info-item { display: flex; gap: 1rem; margin-bottom: 1.2rem; }
 .info-icon {
@@ -678,6 +686,7 @@ h1, h2, h3, h4 { line-height: 1.2; letter-spacing: -.02em; }
 }
 
 @media (max-width: 760px) {
+  .demo-notice { justify-content: space-between; font-size: .72rem; }
   .hamburger { display: block; }
   .nav-links {
     position: fixed; inset: 64px 0 auto 0; flex-direction: column; gap: 0;

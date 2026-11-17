@@ -1,18 +1,88 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    match /users/{userId} {
-      allow read, update, delete: if request.auth != null && request.auth.uid == userId;
-      allow create: if request.auth != null && request.auth.uid == userId;
+    function isOwner(userId) {
+      return request.auth != null && request.auth.uid == userId;
     }
+
+    function validUser(userId) {
+      let data = request.resource.data;
+      return data.keys().hasAll(['userId', 'correo', 'nombre', 'fecha'])
+        && data.keys().hasOnly([
+          'userId', 'correo', 'nombre', 'fecha', 'fechaRegistro',
+          'ultimoAcceso', 'ultimoMetodoAcceso', 'direccion'
+        ])
+        && data.userId == userId
+        && data.correo is string && data.correo.size() <= 254
+        && data.nombre is string && data.nombre.size() >= 1 && data.nombre.size() <= 100
+        && data.fecha == request.time
+        && (!('fechaRegistro' in data) || data.fechaRegistro is timestamp)
+        && (!('ultimoAcceso' in data) || data.ultimoAcceso is timestamp)
+        && (!('ultimoMetodoAcceso' in data)
+          || (data.ultimoMetodoAcceso is string && data.ultimoMetodoAcceso in ['email', 'google']))
+        && (!('direccion' in data) || (data.direccion is string && data.direccion.size() <= 500));
+    }
+
+    match /users/{userId} {
+      allow read, delete: if isOwner(userId);
+      allow create, update: if isOwner(userId) && validUser(userId);
+    }
+
     match /orders/{orderId} {
-      allow create: if request.auth != null && request.resource.data.userId == request.auth.uid;
+      allow create: if request.auth != null
+        && request.resource.data.keys().hasAll(['userId', 'cliente', 'items', 'total', 'fecha'])
+        && request.resource.data.keys().hasOnly(['userId', 'cliente', 'items', 'total', 'fecha'])
+        && request.resource.data.userId == request.auth.uid
+        && request.resource.data.cliente is map
+        && request.resource.data.cliente.keys().hasAll(['nombre', 'email'])
+        && request.resource.data.cliente.keys().hasOnly(['nombre', 'email'])
+        && request.resource.data.cliente.nombre is string
+        && request.resource.data.cliente.nombre.size() >= 1
+        && request.resource.data.cliente.nombre.size() <= 100
+        && request.resource.data.cliente.email == request.auth.token.email
+        && request.resource.data.items is list
+        && request.resource.data.items.size() >= 1
+        && request.resource.data.items.size() <= 50
+        && (request.resource.data.total is int || request.resource.data.total is float)
+        && request.resource.data.total > 0
+        && request.resource.data.total <= 100000
+        && request.resource.data.fecha == request.time;
       allow read: if request.auth != null && resource.data.userId == request.auth.uid;
       allow update, delete: if false;
     }
+
     match /form_submissions/{formId} {
-      allow create: if true;
+      // La escritura sigue siendo anónima para permitir el formulario público.
+      // Activa App Check antes de exigir `request.app != null` en producción.
+      allow create: if request.resource.data.keys().hasAll([
+          'nombre', 'empresa', 'email', 'telefono', 'motivo',
+          'mensaje', 'aceptaPrivacidad', 'fecha'
+        ])
+        && request.resource.data.keys().hasOnly([
+          'nombre', 'empresa', 'email', 'telefono', 'motivo',
+          'mensaje', 'aceptaPrivacidad', 'fecha'
+        ])
+        && request.resource.data.nombre is string
+        && request.resource.data.nombre.size() >= 1
+        && request.resource.data.nombre.size() <= 80
+        && request.resource.data.empresa is string
+        && request.resource.data.empresa.size() <= 120
+        && request.resource.data.email is string
+        && request.resource.data.email.size() <= 254
+        && request.resource.data.email.matches('^[^@]+@[^@]+[.][^@]+$')
+        && request.resource.data.telefono is string
+        && request.resource.data.telefono.size() <= 30
+        && request.resource.data.motivo in ['soporte', 'sophos', 'dfserver', 'equipos', 'asesoria', 'otro']
+        && request.resource.data.mensaje is string
+        && request.resource.data.mensaje.size() >= 10
+        && request.resource.data.mensaje.size() <= 2000
+        && request.resource.data.aceptaPrivacidad == true
+        && request.resource.data.fecha == request.time;
       allow read, update, delete: if false;
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
     }
   }
 }

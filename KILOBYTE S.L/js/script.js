@@ -5,6 +5,21 @@
 "use strict";
 
 document.addEventListener("DOMContentLoaded", () => {
+  /* ---------- Aviso de proyecto educativo ---------- */
+  const navbarEl = document.getElementById("navbar");
+  if (navbarEl && !document.querySelector(".demo-notice")) {
+    const notice = document.createElement("div");
+    notice.className = "demo-notice";
+    notice.setAttribute("role", "note");
+    const noticeText = document.createElement("span");
+    noticeText.textContent = "Proyecto educativo · Demostración sin ventas ni soporte reales";
+    const noticeLink = document.createElement("a");
+    noticeLink.href = "planificacion.html";
+    noticeLink.textContent = "Ver proyecto";
+    notice.append(noticeText, noticeLink);
+    navbarEl.insertAdjacentElement("afterend", notice);
+  }
+
   /* ---------- Menú móvil ---------- */
   const hamburger = document.getElementById("hamburger");
   const navbar = document.getElementById("navbar");
@@ -50,29 +65,52 @@ document.addEventListener("DOMContentLoaded", () => {
       if (err) err.textContent = message || "";
       return !message;
     };
-    form.addEventListener("submit", (ev) => {
+    form.addEventListener("submit", async (ev) => {
       ev.preventDefault();
-      const nombre = form.nombre, email = form.email, motivo = form.motivo, mensaje = form.mensaje;
+      const nombre = form.nombre, empresa = form.empresa, email = form.email;
+      const telefono = form.telefono, motivo = form.motivo, mensaje = form.mensaje;
+      const submitBtn = form.querySelector('button[type="submit"]');
       let ok = true;
-      ok &= setError(nombre, nombre.value.trim() ? "" : "Introduce tu nombre.");
+      ok &= setError(nombre, nombre.value.trim() && nombre.value.trim().length <= 80 ? "" : "Introduce un nombre de hasta 80 caracteres.");
       ok &= setError(email, /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value.trim()) ? "" : "Introduce un email válido.");
       ok &= setError(motivo, motivo.value ? "" : "Selecciona un servicio.");
-      ok &= setError(mensaje, mensaje.value.trim().length >= 10 ? "" : "Cuéntanos un poco más (mínimo 10 caracteres).");
+      ok &= setError(mensaje, mensaje.value.trim().length >= 10 && mensaje.value.trim().length <= 2000 ? "" : "Escribe entre 10 y 2.000 caracteres.");
       ok &= setError(form.privacidad, form.privacidad.checked ? "" : "Debes aceptar la política de privacidad.");
-      if (ok) {
-        // Guardar el mensaje en Firestore (colección "form_submissions")
-        if (window.KBDB) {
-          window.KBDB.guardar("form_submissions", {
-            nombre: nombre.value.trim(),
-            email: email.value.trim(),
-            motivo: motivo.value,
-            mensaje: mensaje.value.trim(),
-            aceptaPrivacidad: true,
-          }).catch((err) => console.error("Error al guardar el contacto:", err));
-        }
+      if (!ok) return;
+
+      success.hidden = true;
+      success.classList.remove("is-error");
+      if (!window.KBDB) {
+        success.textContent = "No se ha podido conectar con el servicio. Inténtalo de nuevo en unos segundos.";
+        success.classList.add("is-error");
+        success.hidden = false;
+        return;
+      }
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = "Enviando…";
+      try {
+        await window.KBDB.guardar("form_submissions", {
+          nombre: nombre.value.trim(),
+          empresa: empresa.value.trim(),
+          email: email.value.trim().toLowerCase(),
+          telefono: telefono.value.trim(),
+          motivo: motivo.value,
+          mensaje: mensaje.value.trim(),
+          aceptaPrivacidad: true,
+        });
+        success.textContent = "✓ Mensaje enviado. Te contactaremos lo antes posible.";
         success.hidden = false;
         form.reset();
         setTimeout(() => (success.hidden = true), 6000);
+      } catch (err) {
+        console.error("Error al guardar el contacto:", err);
+        success.textContent = "No hemos podido enviar el mensaje. Conserva tus datos e inténtalo de nuevo.";
+        success.classList.add("is-error");
+        success.hidden = false;
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Enviar mensaje";
       }
     });
   }
@@ -113,10 +151,51 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
 
-  const addMsg = (html, who) => {
+  const appendSafeBotContent = (html, parent) => {
+    const template = document.createElement("template");
+    template.innerHTML = String(html);
+
+    const copySafeNodes = (source, target) => {
+      source.childNodes.forEach((node) => {
+        if (node.nodeType === Node.TEXT_NODE) {
+          target.appendChild(document.createTextNode(node.textContent || ""));
+          return;
+        }
+        if (node.nodeType !== Node.ELEMENT_NODE) return;
+
+        const tag = node.tagName.toLowerCase();
+        if (tag === "br") {
+          target.appendChild(document.createElement("br"));
+          return;
+        }
+        if (tag === "strong") {
+          const strong = document.createElement("strong");
+          copySafeNodes(node, strong);
+          target.appendChild(strong);
+          return;
+        }
+        if (tag === "a") {
+          const href = (node.getAttribute("href") || "").trim();
+          if (/^(?:[a-z0-9-]+\.html(?:#[a-z0-9-]+)?|#[a-z0-9-]+)$/i.test(href)) {
+            const link = document.createElement("a");
+            link.href = href;
+            copySafeNodes(node, link);
+            target.appendChild(link);
+            return;
+          }
+        }
+        copySafeNodes(node, target);
+      });
+    };
+
+    copySafeNodes(template.content, parent);
+  };
+
+  const addMsg = (content, who) => {
     const div = document.createElement("div");
     div.className = `msg msg-${who}`;
-    div.innerHTML = html;
+    if (who === "user") div.textContent = String(content);
+    else appendSafeBotContent(content, div);
     chatBody.appendChild(div);
     chatBody.scrollTop = chatBody.scrollHeight;
   };
@@ -667,7 +746,22 @@ document.addEventListener("DOMContentLoaded", () => {
     new Intl.NumberFormat("es-ES", { minimumFractionDigits: 2, maximumFractionDigits: 2, useGrouping: true })
       .format(n) + " €";
   let cart = [];
-    try { cart = JSON.parse(localStorage.getItem("kb-cart") || "[]"); } catch { cart = []; }
+    try {
+      const storedCart = JSON.parse(localStorage.getItem("kb-cart") || "[]");
+      if (Array.isArray(storedCart)) {
+        cart = storedCart.flatMap((item) => {
+          const product = PRODUCTS.find((p) => p.id === item?.id);
+          if (!product) return [];
+          const variant = Number.isInteger(item.variant) && item.variant >= 0 && item.variant < product.variants.length
+            ? item.variant
+            : undefined;
+          const qty = Math.min(99, Math.max(1, Number.parseInt(item.qty, 10) || 1));
+          return [{ id: product.id, variant, qty, key: `${product.id}:${variant ?? "base"}` }];
+        });
+      }
+    } catch {
+      cart = [];
+    }
 
     const saveCart = () => localStorage.setItem("kb-cart", JSON.stringify(cart));
 
@@ -860,34 +954,54 @@ document.addEventListener("DOMContentLoaded", () => {
     const getSession = () => (auth() ? auth().getSession() : null);
     const openAuth = (opts) => { if (auth()) auth().openAuth(opts); };
 
-    const completeCheckout = () => {
-      cartMsgEl.hidden = false;
-      cartMsgEl.textContent = "✓ ¡Pedido tramitado correctamente! Gracias por tu compra.";
-      // Guardar el pedido en Firestore (colección "orders", reglas exigen userId)
+    const completeCheckout = async () => {
       const session = getSession();
-      if (window.KBDB && session && session.uid) {
+      if (!window.KBDB || !session?.uid) {
+        cartMsgEl.hidden = false;
+        cartMsgEl.classList.add("is-error");
+        cartMsgEl.textContent = "No se ha podido conectar con el servicio de pedidos. Inténtalo de nuevo.";
+        return;
+      }
+
+      const checkoutBtn = document.getElementById("checkoutBtn");
+      checkoutBtn.disabled = true;
+      checkoutBtn.textContent = "Tramitando…";
+      cartMsgEl.hidden = false;
+      cartMsgEl.classList.remove("is-error");
+      cartMsgEl.textContent = "Guardando el pedido…";
+      try {
         const items = cart.map((i) => {
           const p = PRODUCTS.find((x) => x.id === i.id);
+          if (!p) throw new Error("Producto no válido");
           const variant = i.variant !== undefined ? p.variants[i.variant] : null;
-          return { producto: p.name, variante: variant ? variant.name : null, precio: variant ? variant.price : p.price, cantidad: i.qty };
+          return { id: p.id, variante: variant ? variant.name : null, precio: variant ? variant.price : p.price, cantidad: i.qty };
         });
         const total = items.reduce((s, it) => s + it.precio * it.cantidad, 0) * 1.21;
-        window.KBDB.guardar("orders", {
+        await window.KBDB.guardar("orders", {
           userId: session.uid,
           cliente: { nombre: session.name, email: session.email },
           items,
           total: Math.round(total * 100) / 100,
-        }).catch((err) => console.error("Error al guardar el pedido:", err));
+        });
+        cartMsgEl.textContent = "✓ Pedido registrado. Te contactaremos para confirmar la entrega.";
+        cart = [];
+        saveCart();
+        renderCart();
+        setTimeout(() => { cartMsgEl.hidden = true; openCart(false); }, 3000);
+      } catch (err) {
+        console.error("Error al guardar el pedido:", err);
+        cartMsgEl.classList.add("is-error");
+        cartMsgEl.textContent = "No se ha podido registrar el pedido. El carrito se conserva para que puedas reintentarlo.";
+      } finally {
+        checkoutBtn.disabled = false;
+        checkoutBtn.textContent = "Tramitar pedido";
       }
-      cart = [];
-      saveCart(); renderCart();
-      setTimeout(() => { cartMsgEl.hidden = true; openCart(false); }, 3000);
     };
 
     /* API pública para el módulo de autenticación global (script.js) */
     window.KBShop = {
       // Se llama tras iniciar sesión si el usuario quería tramitar un pedido
-      afterLogin: () => { if (cart.length) completeCheckout(); else showCartEmptyMsg(); },
+      afterLogin: () => { if (cart.length) void completeCheckout(); else showCartEmptyMsg(); },
     };
 
     /* ---------- Checkout protegido ---------- */
@@ -910,7 +1024,7 @@ document.addEventListener("DOMContentLoaded", () => {
         openAuth({ pendingCheckout: true });
         return;
       }
-      completeCheckout();
+      void completeCheckout();
     });
 
     document.getElementById("clearCartBtn").addEventListener("click", () => {
@@ -954,12 +1068,12 @@ document.addEventListener("DOMContentLoaded", () => {
           </div>
           <form id="loginForm" novalidate>
             <div class="form-field">
-              <label for="loginEmail">Usuario o email</label>
-              <input type="text" id="loginEmail" placeholder="admin o tu@email.com" autocomplete="username" required>
+              <label for="loginEmail">Email</label>
+              <input type="email" id="loginEmail" maxlength="254" placeholder="tu@email.com" autocomplete="username" required>
             </div>
             <div class="form-field">
               <label for="loginPass">Contraseña</label>
-              <input type="password" id="loginPass" placeholder="Tu contraseña" autocomplete="current-password" required>
+              <input type="password" id="loginPass" maxlength="128" placeholder="Tu contraseña" autocomplete="current-password" required>
             </div>
             <p class="auth-error" id="loginError" hidden></p>
             <button class="btn btn-primary btn-block" type="submit">Entrar</button>
@@ -969,19 +1083,19 @@ document.addEventListener("DOMContentLoaded", () => {
           <form id="registerForm" hidden novalidate>
             <div class="form-field">
               <label for="regName">Nombre y apellidos</label>
-              <input type="text" id="regName" placeholder="Nombre completo" autocomplete="name" required>
+              <input type="text" id="regName" maxlength="100" placeholder="Nombre completo" autocomplete="name" required>
             </div>
             <div class="form-field">
               <label for="regEmail">Email</label>
-              <input type="email" id="regEmail" placeholder="tu@email.com" autocomplete="email" required>
+              <input type="email" id="regEmail" maxlength="254" placeholder="tu@email.com" autocomplete="email" required>
             </div>
             <div class="form-field">
               <label for="regPass">Contraseña</label>
-              <input type="password" id="regPass" placeholder="Mínimo 8 caracteres" autocomplete="new-password" required>
+              <input type="password" id="regPass" minlength="8" maxlength="128" placeholder="Mínimo 8 caracteres" autocomplete="new-password" required>
             </div>
             <div class="form-field">
               <label for="regPass2">Confirmar contraseña</label>
-              <input type="password" id="regPass2" placeholder="Repite la contraseña" autocomplete="new-password" required>
+              <input type="password" id="regPass2" minlength="8" maxlength="128" placeholder="Repite la contraseña" autocomplete="new-password" required>
             </div>
             <p class="auth-error" id="registerError" hidden></p>
             <div class="form-field">
@@ -1118,18 +1232,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const email = document.getElementById("loginEmail").value.trim().toLowerCase();
       const pass = document.getElementById("loginPass").value;
 
-      // ---- Acceso de administrador (cuenta local, sin Firebase) ----
-      // Usuario: admin  |  Contraseña: 1234
-      if (email === "admin" && pass === "1234") {
-        setSession({ uid: "admin", name: "Administrador", email: "admin", rol: "admin" });
-        closeAuth();
-        renderAuthUi();
-        notifyLogin();
-        return;
-      }
-
-      // El resto de usuarios inician sesión con su email (Firebase Authentication)
-      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return showAuthError(loginError, "Introduce tu usuario o email válido.");
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return showAuthError(loginError, "Introduce un email válido.");
       if (!pass) return showAuthError(loginError, "Introduce tu contraseña.");
 
       if (!window.KBAUTH) return showAuthError(loginError, "Firebase no está disponible. Inténtalo de nuevo en unos segundos.");
@@ -1212,7 +1315,7 @@ document.addEventListener("DOMContentLoaded", () => {
       btn.addEventListener("click", async () => {
         loginError.hidden = true; registerError.hidden = true;
         try {
-          const { user } = await window.KBAUTH.google();
+          const user = await window.KBAUTH.google();
           registrarAcceso("google", user);
           finishAuth(user);
         } catch (err) {

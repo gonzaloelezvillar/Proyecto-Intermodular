@@ -58,23 +58,23 @@
           <div class="form-row">
             <div class="form-group">
               <label for="nombre">Nombre *</label>
-              <input type="text" id="nombre" name="nombre" required placeholder="Tu nombre">
+              <input type="text" id="nombre" name="nombre" maxlength="80" autocomplete="name" required placeholder="Tu nombre">
               <small class="error-msg"></small>
             </div>
             <div class="form-group">
               <label for="empresa">Empresa</label>
-              <input type="text" id="empresa" name="empresa" placeholder="Nombre de tu empresa">
+              <input type="text" id="empresa" name="empresa" maxlength="120" autocomplete="organization" placeholder="Nombre de tu empresa">
             </div>
           </div>
           <div class="form-row">
             <div class="form-group">
               <label for="email">Email *</label>
-              <input type="email" id="email" name="email" required placeholder="tu@empresa.com">
+              <input type="email" id="email" name="email" maxlength="254" autocomplete="email" required placeholder="tu@empresa.com">
               <small class="error-msg"></small>
             </div>
             <div class="form-group">
               <label for="telefono">Teléfono</label>
-              <input type="tel" id="telefono" name="telefono" placeholder="600 000 000">
+              <input type="tel" id="telefono" name="telefono" maxlength="30" autocomplete="tel" placeholder="600 000 000">
             </div>
           </div>
           <div class="form-group">
@@ -92,7 +92,7 @@
           </div>
           <div class="form-group">
             <label for="mensaje">Mensaje *</label>
-            <textarea id="mensaje" name="mensaje" rows="5" required
+            <textarea id="mensaje" name="mensaje" rows="5" minlength="10" maxlength="2000" required
               placeholder="Describe tu caso: qué necesitas y cómo podemos ayudarte."></textarea>
             <small class="error-msg"></small>
           </div>
@@ -105,7 +105,7 @@
             <small class="error-msg"></small>
           </div>
           <button type="submit" class="btn btn-primary btn-block">Enviar mensaje</button>
-          <p class="form-success" id="formSuccess" hidden>✅ ¡Mensaje enviado! Te contactaremos lo antes posible.</p>
+          <p class="form-success" id="formSuccess" role="status" aria-live="polite" hidden></p>
         </form>
 
         <aside class="contact-info">
