@@ -1,5 +1,5 @@
 import type {User} from 'firebase/auth';
-import {createUserWithEmailAndPassword, signOut, updateProfile} from 'firebase/auth';
+import {createUserWithEmailAndPassword, deleteUser, signOut, updateProfile} from 'firebase/auth';
 import {collection, doc, getDoc, getDocs, limit, query, setDoc, where, writeBatch} from 'firebase/firestore';
 import {accountCreationAuth,db,prepareAccountCreationAuth} from './firebase';
 import {modules, type RecordItem} from './model';
@@ -18,18 +18,22 @@ const permissionLists=(value:string)=>{
   };
 };
 
-export async function createEmployeeAccount(email:string,password:string,name:string){
+async function createEmployeeAccount(email:string,password:string,name:string){
   await prepareAccountCreationAuth();
+  let created:User|undefined;
   try{
     const credential=await createUserWithEmailAndPassword(accountCreationAuth,email.trim().toLowerCase(),password);
+    created=credential.user;
     await updateProfile(credential.user,{displayName:name});
+    return credential.user;
   }catch(error){
+    if(created)await deleteUser(created).catch(()=>undefined);
     const code=String((error as {code?:string})?.code||'');
     if(code==='auth/email-already-in-use')throw Error('Ya existe una cuenta de acceso con ese correo. Usa “He olvidado mi contraseña” para establecer una nueva.');
     if(code==='auth/weak-password')throw Error('La contraseña debe tener al menos 8 caracteres.');
     if(code==='auth/operation-not-allowed')throw Error('El acceso con correo y contraseña todavía no está habilitado en Firebase.');
     throw Error('No se pudo crear la cuenta de acceso en Firebase.');
-  }finally{await signOut(accountCreationAuth).catch(()=>undefined)}
+  }
 }
 
 async function ensureAccess(user:User){
@@ -69,7 +73,7 @@ export async function loadWorkspace(user:User):Promise<Workspace>{
     const snapshot=await getDocs(query(collection(db,'activity'),where('kind','==',kind),limit(20)));
     return snapshot.docs.map(item=>({id:item.id,...item.data()} as ActivityItem));
   }));
-  return {records:recordGroups.flat().sort((a,b)=>b.updatedAt.localeCompare(a.updatedAt)),activity:activityGroups.flat().sort((a,b)=>b.at.localeCompare(a.at)).slice(0,100),me:{role,read:isAdmin?read:[...new Set([...read,'dashboard'])],write}};
+  return {records:recordGroups.flat().sort((a,b)=>b.updatedAt.localeCompare(a.updatedAt)),activity:activityGroups.flat().sort((a,b)=>b.at.localeCompare(a.at)).slice(0,100),me:{role,read:[...new Set([...read,'dashboard'])],write}};
 }
 
 export async function saveWorkspaceRecord(user:User,kind:string,data:Record<string,string>,record?:RecordItem,archived=0){
@@ -77,6 +81,7 @@ export async function saveWorkspaceRecord(user:User,kind:string,data:Record<stri
   const permissions=kind==='roles'?permissionLists(data.permissions||''):null;
   const email=kind==='users'?String(data.email||'').trim().toLowerCase():'';
   if(kind==='users'&&!email)throw Error('El usuario necesita un correo de acceso.');
+  if(kind==='users'&&record&&email!==String(record.data.email||'').trim().toLowerCase())throw Error('El correo de acceso no se puede cambiar. Archiva este usuario y crea uno nuevo con el correo correcto.');
   const linkedAccess=kind==='users'?await getDocs(query(collection(db,'access'),where('email','==',email))):null;
   const previousEmail=kind==='users'?String(record?.data.email||'').trim().toLowerCase():'';
   const batch=writeBatch(db);
@@ -91,4 +96,17 @@ export async function saveWorkspaceRecord(user:User,kind:string,data:Record<stri
     if(previousEmail&&previousEmail!==email)batch.delete(doc(db,'invitations',previousEmail));
   }
   await batch.commit();
+}
+
+export async function createEmployeeWorkspaceAccount(actor:User,data:Record<string,string>,password:string){
+  let created:User|undefined;
+  try{
+    created=await createEmployeeAccount(data.email,password,data.name);
+    await saveWorkspaceRecord(actor,'users',data);
+  }catch(error){
+    if(created)await deleteUser(created).catch(()=>undefined);
+    throw error;
+  }finally{
+    await signOut(accountCreationAuth).catch(()=>undefined);
+  }
 }
