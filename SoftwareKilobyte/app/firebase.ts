@@ -1,8 +1,8 @@
 import {initializeApp} from 'firebase/app';
-import {getAuth, GoogleAuthProvider} from 'firebase/auth';
+import {getAuth, inMemoryPersistence, setPersistence} from 'firebase/auth';
 import {getFirestore} from 'firebase/firestore';
 
-const firebaseConfig = {
+export const firebaseConfig = {
   projectId: 'software-kilobyte-sl',
   appId: '1:734816414072:web:b7b3a8535fafd8050a808d',
   storageBucket: 'software-kilobyte-sl.firebasestorage.app',
@@ -15,5 +15,9 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const db = getFirestore(app);
-export const googleProvider = new GoogleAuthProvider();
-googleProvider.setCustomParameters({prompt: 'select_account'});
+auth.languageCode = 'es';
+
+const accountCreationApp = initializeApp(firebaseConfig,'account-creation');
+export const accountCreationAuth = getAuth(accountCreationApp);
+accountCreationAuth.languageCode = 'es';
+export const prepareAccountCreationAuth = () => setPersistence(accountCreationAuth,inMemoryPersistence);

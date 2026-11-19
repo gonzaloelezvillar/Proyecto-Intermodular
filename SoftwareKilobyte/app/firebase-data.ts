@@ -1,6 +1,7 @@
 import type {User} from 'firebase/auth';
-import {collection, deleteDoc, doc, getDoc, getDocs, limit, query, runTransaction, setDoc, where} from 'firebase/firestore';
-import {db} from './firebase';
+import {createUserWithEmailAndPassword, signOut, updateProfile} from 'firebase/auth';
+import {collection, deleteDoc, doc, getDoc, getDocs, limit, query, runTransaction, setDoc, updateDoc, where} from 'firebase/firestore';
+import {accountCreationAuth,db,prepareAccountCreationAuth} from './firebase';
 import {modules, type RecordItem} from './model';
 
 export const BOOTSTRAP_ADMIN_EMAIL = 'pinsugonsu@gmail.com';
@@ -17,8 +18,22 @@ const permissionLists=(value:string)=>{
   };
 };
 
+export async function createEmployeeAccount(email:string,password:string,name:string){
+  await prepareAccountCreationAuth();
+  try{
+    const credential=await createUserWithEmailAndPassword(accountCreationAuth,email.trim().toLowerCase(),password);
+    await updateProfile(credential.user,{displayName:name});
+  }catch(error){
+    const code=String((error as {code?:string})?.code||'');
+    if(code==='auth/email-already-in-use')throw Error('Ya existe una cuenta de acceso con ese correo. Usa “He olvidado mi contraseña” para establecer una nueva.');
+    if(code==='auth/weak-password')throw Error('La contraseña debe tener al menos 8 caracteres.');
+    if(code==='auth/operation-not-allowed')throw Error('El acceso con correo y contraseña todavía no está habilitado en Firebase.');
+    throw Error('No se pudo crear la cuenta de acceso en Firebase.');
+  }finally{await signOut(accountCreationAuth).catch(()=>undefined)}
+}
+
 async function ensureAccess(user:User){
-  const email=emailOf(user);if(!email)throw Error('La cuenta de Google no tiene un correo verificable.');
+  const email=emailOf(user);if(!email)throw Error('La cuenta interna no tiene un identificador válido.');
   if(email===BOOTSTRAP_ADMIN_EMAIL)return {admin:true,roleId:'',status:'Activo'};
   const inviteRef=doc(db,'invitations',email),accessRef=doc(db,'access',user.uid);
   const [inviteSnap,accessSnap]=await Promise.all([getDoc(inviteRef),getDoc(accessRef)]);
@@ -71,7 +86,10 @@ export async function saveWorkspaceRecord(user:User,kind:string,data:Record<stri
   if(kind==='users'){
     const email=String(data.email||'').trim().toLowerCase();
     if(!email)throw Error('El usuario necesita un correo de acceso.');
-    await setDoc(doc(db,'invitations',email),{name:data.name,email,roleId:data.role,departmentId:data.department,status:archived?'Suspendido':data.status,updatedAt:now});
+    const accessStatus=archived?'Suspendido':data.status;
+    await setDoc(doc(db,'invitations',email),{name:data.name,email,roleId:data.role,departmentId:data.department,status:accessStatus,updatedAt:now});
+    const linkedAccess=await getDocs(query(collection(db,'access'),where('email','==',email)));
+    await Promise.all(linkedAccess.docs.map(item=>updateDoc(item.ref,{name:data.name,roleId:data.role,departmentId:data.department,status:accessStatus,updatedAt:now})));
     const previous=String(record?.data.email||'').trim().toLowerCase();
     if(previous&&previous!==email)await deleteDoc(doc(db,'invitations',previous));
   }
