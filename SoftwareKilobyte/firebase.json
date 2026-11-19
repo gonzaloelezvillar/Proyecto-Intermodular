@@ -1,0 +1,13 @@
+{
+  "hosting": {
+    "site": "soft-kb",
+
+    "public": "public",
+
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ]
+  }
+}
