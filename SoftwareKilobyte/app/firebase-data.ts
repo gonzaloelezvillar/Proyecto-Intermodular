@@ -1,6 +1,6 @@
 import type {User} from 'firebase/auth';
 import {createUserWithEmailAndPassword, signOut, updateProfile} from 'firebase/auth';
-import {collection, deleteDoc, doc, getDoc, getDocs, limit, query, runTransaction, setDoc, updateDoc, where} from 'firebase/firestore';
+import {collection, doc, getDoc, getDocs, limit, query, setDoc, where, writeBatch} from 'firebase/firestore';
 import {accountCreationAuth,db,prepareAccountCreationAuth} from './firebase';
 import {modules, type RecordItem} from './model';
 
@@ -73,24 +73,22 @@ export async function loadWorkspace(user:User):Promise<Workspace>{
 }
 
 export async function saveWorkspaceRecord(user:User,kind:string,data:Record<string,string>,record?:RecordItem,archived=0){
-  const now=new Date().toISOString(),id=record?.id||crypto.randomUUID(),recordRef=doc(db,'records',id);
+  const now=new Date().toISOString(),id=record?.id||crypto.randomUUID(),recordRef=doc(db,'records',id),actor=user.email||user.displayName||'Usuario';
   const permissions=kind==='roles'?permissionLists(data.permissions||''):null;
-  await runTransaction(db,async tx=>{
-    const existing=await tx.get(recordRef);
-    if(record&&(!existing.exists()||Number(existing.data().revision)!==record.revision))throw Error('Otro usuario ha modificado este registro. Actualiza los datos e inténtalo de nuevo.');
-    const item={kind,data,revision:(record?.revision||0)+1,updatedAt:now,archived, ...(permissions?{readPermissions:permissions.read,writePermissions:permissions.write}:{})};
-    tx.set(recordRef,item);
-    const activityRef=doc(collection(db,'activity'));
-    tx.set(activityRef,{record_id:id,kind,action:record?(archived!==record.archived?(archived?'Archivado':'Restaurado'):'Actualizado'):'Creado',actor:user.email||user.displayName||'Usuario',at:now});
-  });
+  const email=kind==='users'?String(data.email||'').trim().toLowerCase():'';
+  if(kind==='users'&&!email)throw Error('El usuario necesita un correo de acceso.');
+  const linkedAccess=kind==='users'?await getDocs(query(collection(db,'access'),where('email','==',email))):null;
+  const previousEmail=kind==='users'?String(record?.data.email||'').trim().toLowerCase():'';
+  const batch=writeBatch(db);
+  const item={kind,data,revision:(record?.revision||0)+1,createdAt:record?.createdAt||now,createdBy:record?.createdBy||actor,updatedAt:now,updatedBy:actor,archived, ...(permissions?{readPermissions:permissions.read,writePermissions:permissions.write}:{})};
+  batch.set(recordRef,item);
+  const activityRef=doc(collection(db,'activity'));
+  batch.set(activityRef,{record_id:id,kind,action:record?(archived!==record.archived?(archived?'Archivado':'Restaurado'):'Actualizado'):'Creado',actor,at:now});
   if(kind==='users'){
-    const email=String(data.email||'').trim().toLowerCase();
-    if(!email)throw Error('El usuario necesita un correo de acceso.');
     const accessStatus=archived?'Suspendido':data.status;
-    await setDoc(doc(db,'invitations',email),{name:data.name,email,roleId:data.role,departmentId:data.department,status:accessStatus,updatedAt:now});
-    const linkedAccess=await getDocs(query(collection(db,'access'),where('email','==',email)));
-    await Promise.all(linkedAccess.docs.map(item=>updateDoc(item.ref,{name:data.name,roleId:data.role,departmentId:data.department,status:accessStatus,updatedAt:now})));
-    const previous=String(record?.data.email||'').trim().toLowerCase();
-    if(previous&&previous!==email)await deleteDoc(doc(db,'invitations',previous));
+    batch.set(doc(db,'invitations',email),{name:data.name,email,roleId:data.role,departmentId:data.department,status:accessStatus,updatedAt:now});
+    linkedAccess?.docs.forEach(item=>batch.update(item.ref,{name:data.name,roleId:data.role,departmentId:data.department,status:accessStatus,updatedAt:now}));
+    if(previousEmail&&previousEmail!==email)batch.delete(doc(db,'invitations',previousEmail));
   }
+  await batch.commit();
 }

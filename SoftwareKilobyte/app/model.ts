@@ -17,7 +17,7 @@ export const modules:Record<string,Module>={
  departments:{label:'Departamentos',singular:'departamento',description:'Organiza el equipo por áreas y responsabilidades.',prefix:'DEP',fields:[f('name','Nombre del departamento','text',true),f('lead','Responsable'),notes]},
  documents:{label:'Documentación',singular:'documento',description:'Procedimientos, referencias normativas y planes de empresa.',prefix:'DOC',fields:[f('name','Título','text',true),f('category','Categoría','select',true,['Referencia normativa','Plan de empresa','Procedimiento','Otro']),f('url','Enlace al documento','url'),assignee,f('due','Próxima revisión','date'),f('status','Estado','select',true,['Pendiente','En revisión','Revisado']),notes]},
 };
-export type RecordItem={id:string;kind:string;data:Record<string,string>;revision:number;updatedAt:string;archived:number};
+export type RecordItem={id:string;kind:string;data:Record<string,string>;revision:number;updatedAt:string;archived:number;createdAt?:string;createdBy?:string;updatedBy?:string};
 export const money=(n:number)=>new Intl.NumberFormat('es-ES',{style:'currency',currency:'EUR'}).format(n);
 export function total(d:Record<string,string>){return Math.round(Number(d.amount||0)*Number(d.quantity||1)*(1+Number(d.tax||0)/100)*100)*.01;}
 export function validate(kind:string,data:Record<string,string>){

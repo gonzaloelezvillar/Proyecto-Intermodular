@@ -15,7 +15,10 @@ service cloud.firestore {
       return data.keys().hasAll(['kind','data','revision','updatedAt','archived'])
         && data.kind is string && data.kind in ['clients','tickets','equipment','licenses','contracts','quotes','invoices','tasks','employees','users','roles','departments','documents']
         && data.data is map && data.revision is int && data.revision > 0
-        && data.updatedAt is string && data.archived in [0,1];
+        && data.updatedAt is string && data.archived in [0,1]
+        && (!('createdAt' in data) || data.createdAt is string)
+        && (!('createdBy' in data) || data.createdBy is string)
+        && (!('updatedBy' in data) || data.updatedBy is string);
     }
 
     match /records/{recordId} {
