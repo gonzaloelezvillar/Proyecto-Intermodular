@@ -2,7 +2,7 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
     function signedIn() { return request.auth != null && request.auth.token.email != null; }
-    function bootstrapAdmin() { return signedIn() && request.auth.token.email == 'pinsugonsu@gmail.com'; }
+    function bootstrapAdmin() { return signedIn() && request.auth.token.email in ['pinsugonsu@gmail.com', 'admin@kilobyte.es']; }
     function hasAccount() { return signedIn() && exists(/databases/$(database)/documents/access/$(request.auth.uid)); }
     function account() { return get(/databases/$(database)/documents/access/$(request.auth.uid)).data; }
     function active() { return hasAccount() && account().status == 'Activo'; }

@@ -12,7 +12,7 @@ Aplicación interna de gestión para los empleados de Kilobyte SL. Centraliza cl
 
 Los administradores crean las cuentas desde el módulo **Usuarios**, indicando correo de acceso, contraseña inicial, rol y departamento. Las contraseñas no se guardan en Firestore. Los roles asignan permisos independientes de lectura y escritura por menú y las reglas de la base de datos vuelven a validarlos.
 
-El administrador inicial es `pinsugonsu@gmail.com`. En el primer acceso debe establecer su contraseña desde el correo de recuperación enviado por Firebase; para los empleados siguientes, la contraseña inicial se define al crear el usuario desde la aplicación.
+Las cuentas administradoras iniciales son `pinsugonsu@gmail.com` y `admin@kilobyte.es`. Para los empleados siguientes, la contraseña inicial se define al crear el usuario desde la aplicación.
 
 ## Desarrollo local
 

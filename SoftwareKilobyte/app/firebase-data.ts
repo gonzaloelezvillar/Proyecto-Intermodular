@@ -4,7 +4,7 @@ import {collection, deleteDoc, doc, getDoc, getDocs, limit, query, runTransactio
 import {accountCreationAuth,db,prepareAccountCreationAuth} from './firebase';
 import {modules, type RecordItem} from './model';
 
-export const BOOTSTRAP_ADMIN_EMAIL = 'pinsugonsu@gmail.com';
+export const BOOTSTRAP_ADMIN_EMAILS = new Set(['pinsugonsu@gmail.com','admin@kilobyte.es']);
 const ADMIN_KINDS = new Set(['users','roles','departments']);
 type ActivityItem={id:string;record_id:string;kind:string;action:string;actor:string;at:string};
 export type Workspace={records:RecordItem[];activity:ActivityItem[];me:{role:string;read:string[];write:string[]}};
@@ -34,7 +34,7 @@ export async function createEmployeeAccount(email:string,password:string,name:st
 
 async function ensureAccess(user:User){
   const email=emailOf(user);if(!email)throw Error('La cuenta interna no tiene un identificador válido.');
-  if(email===BOOTSTRAP_ADMIN_EMAIL)return {admin:true,roleId:'',status:'Activo'};
+  if(BOOTSTRAP_ADMIN_EMAILS.has(email))return {admin:true,roleId:'',status:'Activo'};
   const inviteRef=doc(db,'invitations',email),accessRef=doc(db,'access',user.uid);
   const [inviteSnap,accessSnap]=await Promise.all([getDoc(inviteRef),getDoc(accessRef)]);
   if(!inviteSnap.exists())throw Error('Tu correo todavía no está autorizado. Un administrador debe crearte desde Usuarios.');
