@@ -1,0 +1,53 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() { return request.auth != null && request.auth.token.email != null; }
+    function bootstrapAdmin() { return signedIn() && request.auth.token.email == 'pinsugonsu@gmail.com'; }
+    function hasAccount() { return signedIn() && exists(/databases/$(database)/documents/access/$(request.auth.uid)); }
+    function account() { return get(/databases/$(database)/documents/access/$(request.auth.uid)).data; }
+    function active() { return hasAccount() && account().status == 'Activo'; }
+    function admin() { return bootstrapAdmin() || (active() && account().admin == true); }
+    function adminKind(kind) { return kind in ['users', 'roles', 'departments']; }
+    function role() { return get(/databases/$(database)/documents/records/$(account().roleId)).data; }
+    function canRead(kind) { return active() && role().readPermissions.hasAny([kind]); }
+    function canWrite(kind) { return active() && role().writePermissions.hasAny([kind]); }
+    function validRecord(data) {
+      return data.keys().hasAll(['kind','data','revision','updatedAt','archived'])
+        && data.kind is string && data.kind in ['clients','tickets','equipment','licenses','contracts','quotes','invoices','tasks','employees','users','roles','departments','documents']
+        && data.data is map && data.revision is int && data.revision > 0
+        && data.updatedAt is string && data.archived in [0,1];
+    }
+
+    match /records/{recordId} {
+      allow get: if admin() || (active() && ((resource.data.kind == 'roles' && recordId == account().roleId) || (!adminKind(resource.data.kind) && canRead(resource.data.kind))));
+      allow list: if admin() || (active() && !adminKind(resource.data.kind) && canRead(resource.data.kind));
+      allow create: if validRecord(request.resource.data) && (admin() || (!adminKind(request.resource.data.kind) && canWrite(request.resource.data.kind)));
+      allow update: if validRecord(request.resource.data) && request.resource.data.kind == resource.data.kind && request.resource.data.revision == resource.data.revision + 1 && (admin() || (!adminKind(resource.data.kind) && canWrite(resource.data.kind)));
+      allow delete: if false;
+    }
+
+    match /activity/{activityId} {
+      allow read: if admin() || (active() && !adminKind(resource.data.kind) && canRead(resource.data.kind));
+      allow create: if request.resource.data.keys().hasAll(['record_id','kind','action','actor','at']) && (admin() || (!adminKind(request.resource.data.kind) && canWrite(request.resource.data.kind)));
+      allow update, delete: if false;
+    }
+
+    match /invitations/{email} {
+      allow get: if admin() || (signedIn() && request.auth.token.email == email);
+      allow list: if admin();
+      allow create, update, delete: if admin();
+    }
+
+    match /access/{uid} {
+      allow read: if admin() || (signedIn() && request.auth.uid == uid);
+      allow create, update: if signedIn() && request.auth.uid == uid
+        && exists(/databases/$(database)/documents/invitations/$(request.auth.token.email))
+        && request.resource.data.email == request.auth.token.email
+        && request.resource.data.roleId == get(/databases/$(database)/documents/invitations/$(request.auth.token.email)).data.roleId
+        && request.resource.data.departmentId == get(/databases/$(database)/documents/invitations/$(request.auth.token.email)).data.departmentId
+        && request.resource.data.status == get(/databases/$(database)/documents/invitations/$(request.auth.token.email)).data.status
+        && request.resource.data.admin == false;
+      allow create, update, delete: if admin();
+    }
+  }
+}
