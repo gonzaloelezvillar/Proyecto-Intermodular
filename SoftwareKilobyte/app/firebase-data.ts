@@ -5,7 +5,7 @@ import {accountCreationAuth,db,prepareAccountCreationAuth} from './firebase';
 import {modules, type RecordItem} from './model';
 
 export const BOOTSTRAP_ADMIN_EMAILS = new Set(['pinsugonsu@gmail.com','admin@kilobyte.es']);
-const ADMIN_KINDS = new Set(['users','roles','departments']);
+const ADMIN_KINDS = new Set(['users','roles','departments','webInbox']);
 type ActivityItem={id:string;record_id:string;kind:string;action:string;actor:string;at:string};
 export type Workspace={records:RecordItem[];activity:ActivityItem[];me:{role:string;read:string[];write:string[]}};
 
@@ -52,7 +52,7 @@ async function ensureAccess(user:User){
 
 export async function loadWorkspace(user:User):Promise<Workspace>{
   const access=await ensureAccess(user),isAdmin=Boolean(access.admin);
-  let role='Administrador',read=Object.keys(modules),write=Object.keys(modules);
+  let role='Administrador',read=Object.keys(modules),write=Object.keys(modules).filter(kind=>kind!=='webInbox');
   if(!isAdmin){
     const roleSnap=await getDoc(doc(db,'records',access.roleId));
     if(!roleSnap.exists()||roleSnap.data().kind!=='roles')throw Error('Tu usuario no tiene un rol válido asignado.');
@@ -61,7 +61,8 @@ export async function loadWorkspace(user:User):Promise<Workspace>{
     role=roleRecord.data.name||'Rol interno';read=parsed.read;write=parsed.write;
   }
   const readable=isAdmin?Object.keys(modules):read.filter(kind=>!ADMIN_KINDS.has(kind));
-  const recordGroups=await Promise.all(readable.map(async kind=>{
+  const recordKinds=readable.filter(kind=>kind!=='webInbox');
+  const recordGroups=await Promise.all(recordKinds.map(async kind=>{
     const snapshot=await getDocs(query(collection(db,'records'),where('kind','==',kind)));
     return snapshot.docs.map(item=>({id:item.id,...item.data()} as RecordItem));
   }));
@@ -69,7 +70,21 @@ export async function loadWorkspace(user:User):Promise<Workspace>{
     const roleSnap=await getDoc(doc(db,'records',access.roleId));
     if(roleSnap.exists())recordGroups.push([{id:roleSnap.id,...roleSnap.data()} as RecordItem]);
   }
-  const activityGroups=await Promise.all(readable.map(async kind=>{
+  if(isAdmin){
+    const snapshot=await getDocs(collection(db,'web_inbox'));
+    recordGroups.push(snapshot.docs.map(item=>{
+      const raw=item.data() as Record<string,unknown>;
+      const timestamp=raw.fecha as {toDate?:()=>Date}|undefined;
+      const updatedAt=timestamp?.toDate?.()?.toISOString()||new Date().toISOString();
+      const data={
+        name:String(raw.nombre||''),email:String(raw.email||''),company:String(raw.empresa||''),
+        type:String(raw.tipo||''),message:String(raw.mensaje||raw.pedido||''),status:String(raw.estado||'Pendiente'),
+        phone:String(raw.telefono||''),reason:String(raw.motivo||''),total:String(raw.total||'0'),order:String(raw.pedido||''),
+      };
+      return {id:item.id,kind:'webInbox',data,revision:1,updatedAt,archived:0} as RecordItem;
+    }));
+  }
+  const activityGroups=await Promise.all(recordKinds.map(async kind=>{
     const snapshot=await getDocs(query(collection(db,'activity'),where('kind','==',kind),limit(20)));
     return snapshot.docs.map(item=>({id:item.id,...item.data()} as ActivityItem));
   }));

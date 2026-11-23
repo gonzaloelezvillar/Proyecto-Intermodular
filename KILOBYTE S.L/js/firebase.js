@@ -37,6 +37,19 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth(app);
 
+// Segundo destino: bandeja interna de Kilobyte Central.
+// La web mantiene su proyecto público para cuentas y pedidos, pero copia
+// formularios y pedidos a la base de datos privada del software.
+const internalApp = initializeApp({
+  apiKey: "AIzaSyBl2p7Rc_4e2qny7ODb6CZtmR5p362En-Y",
+  authDomain: "software-kilobyte-sl.firebaseapp.com",
+  projectId: "software-kilobyte-sl",
+  storageBucket: "software-kilobyte-sl.firebasestorage.app",
+  messagingSenderId: "734816414072",
+  appId: "1:734816414072:web:b7b3a8535fafd8050a808d",
+}, "kilobyte-central-internal");
+const internalDb = getFirestore(internalApp);
+
 /* ============================================================
    Helpers públicos — window.KBDB
    ============================================================ */
@@ -45,6 +58,25 @@ const auth = getAuth(app);
 async function guardar(coleccion, datos) {
   const ref = await addDoc(collection(db, coleccion), {
     ...datos,
+    fecha: serverTimestamp(),
+  });
+  return ref.id;
+}
+
+// Copia pública hacia la bandeja de entradas del software interno.
+async function guardarInterno(datos) {
+  const ref = await addDoc(collection(internalDb, "web_inbox"), {
+    origen: "web-publica",
+    tipo: datos.tipo,
+    estado: "Pendiente",
+    nombre: datos.nombre || "",
+    email: datos.email || "",
+    empresa: datos.empresa || "",
+    telefono: datos.telefono || "",
+    motivo: datos.motivo || "",
+    mensaje: datos.mensaje || "",
+    pedido: datos.pedido || "",
+    total: Number(datos.total || 0),
     fecha: serverTimestamp(),
   });
   return ref.id;
@@ -113,7 +145,7 @@ window.KBAUTH = {
   alCambiar: (cb) => onAuthStateChanged(auth, cb),
 };
 
-window.KBDB = { app, db, auth, guardar, guardarConId, fechaServidor, guardarUsuario };
+window.KBDB = { app, db, auth, guardar, guardarInterno, guardarConId, fechaServidor, guardarUsuario };
 
 // Aviso para el resto de la aplicación
 window.dispatchEvent(new Event("firestore-ready"));

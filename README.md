@@ -1,4 +1,13 @@
 # Proyecto-Intermodular
+
+## Web pública y gestión interna
+
+- Web pública: https://kilobyte-sl.web.app
+- Software interno: https://soft-kb.web.app
+- Los formularios de contacto y pedidos de la tienda se copian automáticamente a la bandeja **Entradas web** de Kilobyte Central.
+- La web conserva sus usuarios y pedidos en su proyecto Firebase público; la copia operativa se guarda en `web_inbox` del proyecto privado `software-kilobyte-sl`.
+- Las entradas públicas solo pueden crearse; los empleados autorizados son los únicos que pueden leerlas desde el software.
+
 ---
 ### He decidido crear un aula virtual en moodle para así recopilar una gran parte de los conocimientos que hemos aprendido en este año de SMR1
 #### Para acceder a este aula virtual tienes que seguir estos pasos

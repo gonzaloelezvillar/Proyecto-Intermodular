@@ -52,5 +52,33 @@ service cloud.firestore {
         && request.resource.data.admin == false;
       allow create, update, delete: if admin();
     }
+
+    match /web_inbox/{inboxId} {
+      allow create: if request.resource.data.keys().hasAll([
+          'origen','tipo','estado','nombre','email','empresa','telefono',
+          'motivo','mensaje','pedido','total','fecha'
+        ])
+        && request.resource.data.keys().hasOnly([
+          'origen','tipo','estado','nombre','email','empresa','telefono',
+          'motivo','mensaje','pedido','total','fecha'
+        ])
+        && request.resource.data.origen == 'web-publica'
+        && request.resource.data.tipo in ['contacto','pedido']
+        && request.resource.data.estado == 'Pendiente'
+        && request.resource.data.nombre is string && request.resource.data.nombre.size() <= 120
+        && request.resource.data.email is string && request.resource.data.email.size() <= 254
+        && request.resource.data.empresa is string && request.resource.data.empresa.size() <= 120
+        && request.resource.data.telefono is string && request.resource.data.telefono.size() <= 30
+        && request.resource.data.motivo is string && request.resource.data.motivo.size() <= 30
+        && request.resource.data.mensaje is string && request.resource.data.mensaje.size() <= 2000
+        && request.resource.data.pedido is string && request.resource.data.pedido.size() <= 10000
+        && (request.resource.data.total is int || request.resource.data.total is float)
+        && request.resource.data.total >= 0 && request.resource.data.total <= 100000
+        && request.resource.data.fecha == request.time;
+      allow read: if admin();
+      allow update: if admin()
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['estado','notaInterna','actualizadoEn']);
+      allow delete: if false;
+    }
   }
 }

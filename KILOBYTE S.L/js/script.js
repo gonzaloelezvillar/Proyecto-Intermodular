@@ -90,7 +90,8 @@ document.addEventListener("DOMContentLoaded", () => {
       submitBtn.disabled = true;
       submitBtn.textContent = "Enviando…";
       try {
-        await window.KBDB.guardar("form_submissions", {
+        await Promise.all([
+          window.KBDB.guardar("form_submissions", {
           nombre: nombre.value.trim(),
           empresa: empresa.value.trim(),
           email: email.value.trim().toLowerCase(),
@@ -98,7 +99,17 @@ document.addEventListener("DOMContentLoaded", () => {
           motivo: motivo.value,
           mensaje: mensaje.value.trim(),
           aceptaPrivacidad: true,
-        });
+          }),
+          window.KBDB.guardarInterno({
+            tipo: "contacto",
+            nombre: nombre.value.trim(),
+            empresa: empresa.value.trim(),
+            email: email.value.trim().toLowerCase(),
+            telefono: telefono.value.trim(),
+            motivo: motivo.value,
+            mensaje: mensaje.value.trim(),
+          }),
+        ]);
         success.textContent = "✓ Mensaje enviado. Te contactaremos lo antes posible.";
         success.hidden = false;
         form.reset();
@@ -977,12 +988,22 @@ document.addEventListener("DOMContentLoaded", () => {
           return { id: p.id, variante: variant ? variant.name : null, precio: variant ? variant.price : p.price, cantidad: i.qty };
         });
         const total = items.reduce((s, it) => s + it.precio * it.cantidad, 0) * 1.21;
-        await window.KBDB.guardar("orders", {
+        const orderData = {
           userId: session.uid,
           cliente: { nombre: session.name, email: session.email },
           items,
           total: Math.round(total * 100) / 100,
-        });
+        };
+        await Promise.all([
+          window.KBDB.guardar("orders", orderData),
+          window.KBDB.guardarInterno({
+            tipo: "pedido",
+            nombre: session.name,
+            email: session.email,
+            pedido: JSON.stringify(items),
+            total: orderData.total,
+          }),
+        ]);
         cartMsgEl.textContent = "✓ Pedido registrado. Te contactaremos para confirmar la entrega.";
         cart = [];
         saveCart();

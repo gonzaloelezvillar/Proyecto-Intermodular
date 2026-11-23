@@ -2,6 +2,8 @@
 
 Aplicación interna de gestión para los empleados de Kilobyte SL. Centraliza clientes, soporte, tareas, equipos, licencias, contratos, presupuestos, facturas, documentación y administración del equipo.
 
+La web pública [kilobyte-sl.web.app](https://kilobyte-sl.web.app) está conectada con este panel: sus formularios de contacto y pedidos aparecen en **Entradas web** dentro de la administración.
+
 ## Producción
 
 - Aplicación: https://soft-kb.web.app
@@ -20,6 +22,7 @@ Los administradores crean las cuentas desde el módulo **Usuarios**, indicando c
 - Los registros se archivan en lugar de eliminarse y las reglas de seguridad impiden su borrado definitivo desde la aplicación.
 - Firestore mantiene una caché persistente en el navegador para conservar datos y cambios pendientes durante cortes de conexión y sincronizarlos al recuperarla.
 - Las contraseñas se gestionan exclusivamente con Firebase Authentication y nunca se almacenan en Firestore ni en el código.
+- Las entradas recibidas desde la web se guardan en `web_inbox` con estado `Pendiente`; solo las cuentas administrativas pueden leerlas.
 
 Las cuentas administradoras iniciales son `pinsugonsu@gmail.com` y `admin@kilobyte.es`. Para los empleados siguientes, la contraseña inicial se define al crear el usuario desde la aplicación.
 
