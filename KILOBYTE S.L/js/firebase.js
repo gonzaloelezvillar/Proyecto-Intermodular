@@ -15,6 +15,7 @@ import {
   addDoc,
   doc,
   setDoc,
+  writeBatch,
   serverTimestamp,
 } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
 // Firebase AI Logic (Gemini) — chatbot del asistente de IA
@@ -65,7 +66,9 @@ async function guardar(coleccion, datos) {
 
 // Copia pública hacia la bandeja de entradas del software interno.
 async function guardarInterno(datos) {
-  const ref = await addDoc(collection(internalDb, "web_inbox"), {
+  const ref = doc(collection(internalDb, "web_inbox"));
+  const notification = doc(collection(internalDb, "notifications"));
+  const payload = {
     origen: "web-publica",
     tipo: datos.tipo,
     estado: "Pendiente",
@@ -78,7 +81,18 @@ async function guardarInterno(datos) {
     pedido: datos.pedido || "",
     total: Number(datos.total || 0),
     fecha: serverTimestamp(),
+  };
+  const batch = writeBatch(internalDb);
+  batch.set(ref, payload);
+  batch.set(notification, {
+    type: datos.tipo === "pedido" ? "pedido" : "contacto",
+    title: datos.tipo === "pedido" ? "Nuevo pedido desde la web" : "Nuevo formulario desde la web",
+    message: datos.nombre ? `${datos.nombre}${datos.email ? ` · ${datos.email}` : ""}` : "Entrada recibida desde la web pública",
+    at: serverTimestamp(),
+    kind: "webInbox",
+    recordId: ref.id,
   });
+  await batch.commit();
   return ref.id;
 }
 

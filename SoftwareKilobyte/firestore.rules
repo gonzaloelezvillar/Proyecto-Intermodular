@@ -7,13 +7,13 @@ service cloud.firestore {
     function account() { return get(/databases/$(database)/documents/access/$(request.auth.uid)).data; }
     function active() { return hasAccount() && account().status == 'Activo'; }
     function admin() { return bootstrapAdmin() || (active() && account().admin == true); }
-    function adminKind(kind) { return kind in ['users', 'roles', 'departments']; }
+    function adminKind(kind) { return kind in ['users', 'roles', 'departments', 'attendance', 'schedules']; }
     function role() { return get(/databases/$(database)/documents/records/$(account().roleId)).data; }
     function canRead(kind) { return active() && role().readPermissions.hasAny([kind]); }
     function canWrite(kind) { return active() && role().writePermissions.hasAny([kind]); }
     function validRecord(data) {
       return data.keys().hasAll(['kind','data','revision','updatedAt','archived'])
-        && data.kind is string && data.kind in ['clients','tickets','equipment','licenses','contracts','quotes','invoices','tasks','employees','users','roles','departments','documents']
+        && data.kind is string && data.kind in ['clients','tickets','equipment','licenses','contracts','quotes','invoices','tasks','employees','users','roles','departments','documents','schedules']
         && data.data is map && data.revision is int && data.revision > 0
         && data.updatedAt is string && data.archived in [0,1]
         && (!('createdAt' in data) || data.createdAt is string)
@@ -78,6 +78,39 @@ service cloud.firestore {
       allow read: if admin();
       allow update: if admin()
         && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['estado','notaInterna','actualizadoEn']);
+      allow delete: if false;
+    }
+
+    match /notifications/{notificationId} {
+      allow create: if request.resource.data.keys().hasAll(['type','title','message','at'])
+        && request.resource.data.keys().hasOnly(['type','title','message','at','kind','recordId'])
+        && request.resource.data.type in ['contacto','pedido','incidencia']
+        && request.resource.data.title is string && request.resource.data.title.size() <= 120
+        && request.resource.data.message is string && request.resource.data.message.size() <= 500
+        && request.resource.data.at == request.time
+        && ((signedIn() && active()) || request.resource.data.type in ['contacto','pedido']);
+      allow read: if admin() || active();
+      allow update, delete: if false;
+    }
+
+    match /time_entries/{entryId} {
+      allow get: if admin() || (active() && request.auth.uid == resource.data.userId);
+      allow list: if admin();
+      allow create: if active()
+        && request.auth.uid == request.resource.data.userId
+        && entryId == request.auth.uid + '_' + request.resource.data.date
+        && request.resource.data.status == 'En curso'
+        && request.resource.data.startedAt == request.time
+        && request.resource.data.createdAt == request.time
+        && request.resource.data.endedAt == null;
+      allow update: if active()
+        && resource.data.userId == request.auth.uid
+        && request.resource.data.userId == resource.data.userId
+        && request.resource.data.startedAt == resource.data.startedAt
+        && request.resource.data.createdAt == resource.data.createdAt
+        && request.resource.data.status == 'Finalizada'
+        && request.resource.data.endedAt == request.time
+        && request.resource.data.updatedAt == request.time;
       allow delete: if false;
     }
   }
