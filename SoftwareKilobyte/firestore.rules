@@ -96,14 +96,14 @@ service cloud.firestore {
     match /time_entries/{entryId} {
       allow get: if admin() || (active() && request.auth.uid == resource.data.userId);
       allow list: if admin();
-      allow create: if active()
+      allow create: if (active() || admin())
         && request.auth.uid == request.resource.data.userId
         && entryId == request.auth.uid + '_' + request.resource.data.date
         && request.resource.data.status == 'En curso'
         && request.resource.data.startedAt == request.time
         && request.resource.data.createdAt == request.time
         && request.resource.data.endedAt == null;
-      allow update: if active()
+      allow update: if (active() || admin())
         && resource.data.userId == request.auth.uid
         && request.resource.data.userId == resource.data.userId
         && request.resource.data.startedAt == resource.data.startedAt

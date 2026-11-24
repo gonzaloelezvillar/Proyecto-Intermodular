@@ -55,7 +55,7 @@ async function ensureAccess(user:User){
 
 export async function loadWorkspace(user:User):Promise<Workspace>{
   const access=await ensureAccess(user),isAdmin=Boolean(access.admin);
-  let role='Administrador',read=Object.keys(modules),write=Object.keys(modules).filter(kind=>!ADMIN_KINDS.has(kind));
+  let role='Administrador',read=Object.keys(modules),write=Object.keys(modules);
   if(!isAdmin){
     const roleSnap=await getDoc(doc(db,'records',access.roleId));
     if(!roleSnap.exists()||roleSnap.data().kind!=='roles')throw Error('Tu usuario no tiene un rol válido asignado.');
