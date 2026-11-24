@@ -88,7 +88,11 @@ service cloud.firestore {
         && request.resource.data.title is string && request.resource.data.title.size() <= 120
         && request.resource.data.message is string && request.resource.data.message.size() <= 500
         && request.resource.data.at == request.time
-        && ((signedIn() && active()) || request.resource.data.type in ['contacto','pedido']);
+        && request.resource.data.kind is string
+        && request.resource.data.recordId is string
+        && request.resource.data.recordId.size() >= 1 && request.resource.data.recordId.size() <= 150
+        && ((signedIn() && active() && request.resource.data.type == 'incidencia' && request.resource.data.kind == 'tickets')
+          || (!signedIn() && request.resource.data.type in ['contacto','pedido'] && request.resource.data.kind == 'webInbox'));
       allow read: if admin() || active();
       allow update, delete: if false;
     }
