@@ -1,6 +1,6 @@
 import type {User} from 'firebase/auth';
 import {createUserWithEmailAndPassword, deleteUser, signOut, updateProfile} from 'firebase/auth';
-import {collection, doc, getDoc, getDocs, limit, query, serverTimestamp, setDoc, updateDoc, where, writeBatch} from 'firebase/firestore';
+import {collection, doc, getDoc, getDocs, limit, onSnapshot, query, serverTimestamp, setDoc, updateDoc, where, writeBatch} from 'firebase/firestore';
 import {accountCreationAuth,db,prepareAccountCreationAuth} from './firebase';
 import {modules, type RecordItem} from './model';
 
@@ -20,6 +20,11 @@ const permissionLists=(value:string)=>{
   };
 };
 const timestampIso=(value:unknown)=>{const date=(value as {toDate?:()=>Date}|undefined)?.toDate?.();return date?.toISOString()||String(value||'')};
+const notificationFromDoc=(item:{id:string;data:()=>Record<string,unknown>}):NotificationItem=>{const raw=item.data();return {id:item.id,type:String(raw.type||''),title:String(raw.title||''),message:String(raw.message||''),at:timestampIso(raw.at),kind:raw.kind?String(raw.kind):undefined,recordId:raw.recordId?String(raw.recordId):undefined}};
+
+export function subscribeNotifications(callback:(items:NotificationItem[])=>void,onError?:(error:Error)=>void){
+  return onSnapshot(query(collection(db,'notifications'),limit(50)),snapshot=>callback(snapshot.docs.map(notificationFromDoc).sort((a,b)=>b.at.localeCompare(a.at))),error=>onError?.(error));
+}
 
 async function createEmployeeAccount(email:string,password:string,name:string){
   await prepareAccountCreationAuth();
@@ -98,7 +103,7 @@ export async function loadWorkspace(user:User):Promise<Workspace>{
     return snapshot.docs.map(item=>({id:item.id,...item.data()} as ActivityItem));
   }));
   const notificationSnapshot=await getDocs(query(collection(db,'notifications'),limit(50)));
-  const notifications=notificationSnapshot.docs.map(item=>{const raw=item.data();return {id:item.id,type:String(raw.type||''),title:String(raw.title||''),message:String(raw.message||''),at:timestampIso(raw.at),kind:raw.kind?String(raw.kind):undefined,recordId:raw.recordId?String(raw.recordId):undefined}}).sort((a,b)=>b.at.localeCompare(a.at));
+  const notifications=notificationSnapshot.docs.map(notificationFromDoc).sort((a,b)=>b.at.localeCompare(a.at));
   const timeSnapshot=await getDoc(doc(db,'time_entries',`${user.uid}_${new Date().toLocaleDateString('en-CA')}`));
   const rawTime=timeSnapshot.exists()?timeSnapshot.data():null;
   const timeEntry=rawTime?{id:timeSnapshot.id,userId:user.uid,name:String(rawTime.name||user.displayName||user.email||'Trabajador'),email:String(rawTime.email||user.email||''),date:String(rawTime.date),startedAt:timestampIso(rawTime.startedAt),endedAt:rawTime.endedAt?timestampIso(rawTime.endedAt):undefined,markedAt:timestampIso(rawTime.createdAt),status:rawTime.status==='Finalizada'?'Finalizada':'En curso'} as TimeEntry:null;
